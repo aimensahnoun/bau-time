@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 
 //React import
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 
 //Depedencies import
 import gsap from "gsap";

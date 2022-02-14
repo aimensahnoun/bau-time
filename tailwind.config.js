@@ -15,6 +15,7 @@ module.exports = {
         "bt-orange": "#f9896B",
         "bt-light-blue": "#c1cee6",
         "bt-form-bg": "#1C1E32",
+        "bt-tab-bg" : "#38394E"
       },
     },
   },

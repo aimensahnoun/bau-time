@@ -2,14 +2,51 @@
 import type { NextPage } from "next";
 import Image from "next/image";
 import Head from "next/head";
+import { useRouter } from "next/router";
+
+//React import
+import { useState } from "react";
 
 //Component import
 import NotificationBell from "../components/notificationBell/notificationBell";
+import DashTab from "../components/dashTab/dashTab";
+
+//Icons import
+import { MdOutlineSpaceDashboard } from "react-icons/md";
+import { HiOutlineOfficeBuilding } from "react-icons/hi";
+import { FiUsers } from "react-icons/fi";
+import { RiSettings4Fill } from "react-icons/ri";
+import { CgLogOut } from "react-icons/cg";
 
 //CSS import
 import styles from "../styles/dashboard.module.css";
 
 const Dashboard: NextPage = () => {
+  const router = useRouter();
+
+  //Current tab index
+  const [currentTab, setCurrentTab] = useState(0);
+
+  //Tabs array
+  const tabs = [
+    {
+      title: "Dashboard",
+      Icon: <MdOutlineSpaceDashboard className="h-[1.5rem] w-[1.5rem]" />,
+    },
+    {
+      title: "Units",
+      Icon: <HiOutlineOfficeBuilding className="h-[1.5rem] w-[1.5rem]" />,
+    },
+    {
+      title: "Employees",
+      Icon: <FiUsers className="h-[1.5rem] w-[1.5rem]" />,
+    },
+    {
+      title: "Settings",
+      Icon: <RiSettings4Fill className="h-[1.5rem] w-[1.5rem]" />,
+    },
+  ];
+
   return (
     <div className="w-screen h-screen">
       <Head>
@@ -43,7 +80,42 @@ const Dashboard: NextPage = () => {
       {/* Body */}
       <div className={`flex ${styles.sidebar}`}>
         {/* SideBar */}
-        <div className="w-[20rem] bg-bt-accent-bg"></div>
+        <div className="w-[20rem] flex flex-col items-center bg-bt-accent-bg  justify-between">
+          <div className="w-[70%] h-[6rem] bg-bt-tab-bg translate-y-20 rounded-lg flex flex-col justify-center items-center">
+            <span className="font-semibold text-[1.2rem]">Created Unit count</span>
+            <span className="font-semibold text-[1.2rem]">0</span>
+          </div>
+          <div className="w-full h-full flex items-center flex-col gap-y-4 justify-center -translate-y-10">
+            {tabs.map((tab, index) => {
+              return (
+                <DashTab
+                  title={tab.title}
+                  isActive={currentTab === index}
+                  key={index}
+                  onClick={() => setCurrentTab(index)}
+                >
+                  {tab.Icon}
+                </DashTab>
+              );
+            })}
+          </div>
+
+          <div className="w-full h-full flex justify-center flex-1 mb-6">
+            <DashTab
+              title="Logout"
+              isActive={false}
+              onClick={() => {
+                router.push("/");
+              }}
+              className=""
+            >
+              <CgLogOut className="h-[1.5rem] w-[1.5rem]" />
+            </DashTab>
+          </div>
+        </div>
+
+        {/* Content */}
+
         <div className={`${styles.body}`}></div>
       </div>
     </div>
