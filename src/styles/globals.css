@@ -1,0 +1,61 @@
+@font-face {
+  font-family: "Gilroy";
+  font-weight: 400;
+  src: url("/fonts/Gilroy/Gilroy-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Gilroy";
+  font-weight: 500;
+  src: url("/fonts/Gilroy/Gilroy-Medium.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Gilroy";
+  src: url("/fonts/Gilroy/Gilroy-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+}
+@font-face {
+  font-family: "Gilroy";
+  src: url("/fonts/Gilroy/Gilroy-Bold.ttf") format("truetype");
+  font-weight: 700;
+}
+@font-face {
+  font-family: "GoogleSans";
+  font-weight: 400;
+  src: url("/fonts/GoogleSans/ProductSans-Regular.woff") format("truetype");
+}
+
+@font-face {
+  font-family: "Gilroy";
+  font-weight: 500;
+  src: url("/fonts/GoogleSans/ProductSans-Medium.woff") format("truetype");
+}
+
+@font-face {
+  font-family: "Gilroy";
+  src: url("/fonts/GoogleSans/ProductSans-Bold.woff") format("truetype");
+  font-weight: 700;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: "Gilroy", sans-serif;
+  color: #fff;
+  background-color: #1a1c31;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
