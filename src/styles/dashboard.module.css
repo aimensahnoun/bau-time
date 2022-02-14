@@ -1,0 +1,7 @@
+.sidebar {
+  height: calc(100% - 5rem);
+}
+
+.body {
+  width: calc(100% - 20rem);
+}

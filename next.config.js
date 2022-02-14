@@ -4,6 +4,9 @@ const withTM = require("next-transpile-modules")(["gsap"]);
 
 const nextConfig = {
   reactStrictMode: true,
-}
+  images: {
+    domains: ["images.pexels.com"],
+  },
+};
 
-module.exports = withTM(nextConfig)
+module.exports = withTM(nextConfig);

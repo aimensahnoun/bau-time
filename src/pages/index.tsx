@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 
 //React import
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 //Depedencies import
 import gsap from "gsap";
@@ -28,7 +28,7 @@ const Home: NextPage = () => {
       { y: -100, opacity: 0 },
       { y: 0, opacity: 1, duration: 1 }
     );
-  } , []);
+  }, []);
 
   return (
     <div className="w-screen h-screen ">

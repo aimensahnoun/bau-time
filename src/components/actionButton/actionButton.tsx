@@ -7,20 +7,22 @@ import styles from "./actionButton.module.css";
 interface ActionButtonProps {
   text: string;
   className?: string;
+  onClick: () => void;
 }
 
 const ActionButton: FunctionComponent<ActionButtonProps> = ({
   text,
   className,
+  onClick,
 }) => {
   const [isClicked, setIsClicked] = useState(false);
 
   const handleClick = () => {
     setIsClicked(true);
-
+    onClick();
     setTimeout(() => {
       setIsClicked(false);
-    }, 4000);
+    }, 2000);
   };
 
   return (
