@@ -1,0 +1,58 @@
+.main {
+}
+
+.main.animate {
+  background-color: transparent;
+  user-select: none;
+  color: transparent;
+}
+
+.main::before {
+  content: "";
+  display: none;
+  position: absolute;
+  inset: 0;
+  background-color: #1c1e32;
+}
+
+.main::after {
+  content: "";
+  display: none;
+  position: absolute;
+  background-color: gainsboro;
+  left: -25%;
+  width: 0%;
+  right: -25%;
+  top: 35%;
+  bottom: 35%;
+  border-radius: 0.5rem;
+}
+
+.main.animate::before {
+  display: block;
+  animation: squish 300ms;
+  animation-fill-mode: forwards;
+  border-radius: 0.5rem;
+}
+
+.main.animate::after {
+  display: block;
+  animation: progress 2s infinite forwards ease-in-out;
+  animation-delay: 300ms;
+  border-radius: 0.5rem;
+}
+
+@keyframes squish {
+  100% {
+    left: -25%;
+    right: -25%;
+    top: 35%;
+    bottom: 35%;
+  }
+}
+
+@keyframes progress {
+  100% {
+    width: 15rem;
+  }
+}
