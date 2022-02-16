@@ -18,7 +18,7 @@ const DashTab: FunctionComponent<DashTabProps> = ({
   return (
     <div
       onClick={onClick}
-      className={`flex gap-x-2 opacity-50 w-[60%] pl-4 py-2 rounded-lg cursor-pointer transition-all duration-300 ${
+      className={` flex gap-x-2 opacity-50 w-[60%] lg:pl-2 2xl:pl-4 py-2 rounded-lg cursor-pointer transition-all duration-300 select-none ${
         isActive ? "opacity-100 bg-bt-tab-bg scale-[1.1] shadow-md" : ""
       } ${className}`}
     >

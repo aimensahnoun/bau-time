@@ -17,6 +17,7 @@ import { HiOutlineOfficeBuilding } from "react-icons/hi";
 import { FiUsers } from "react-icons/fi";
 import { RiSettings4Fill } from "react-icons/ri";
 import { CgLogOut } from "react-icons/cg";
+import { AiOutlineHourglass } from "react-icons/ai";
 
 //CSS import
 import styles from "../styles/dashboard.module.css";
@@ -26,6 +27,9 @@ const Dashboard: NextPage = () => {
 
   //Current tab index
   const [currentTab, setCurrentTab] = useState(0);
+
+  //Checking if unit is open
+  const [unitOpen, setUnitOpen] = useState(false);
 
   //Tabs array
   const tabs = [
@@ -46,6 +50,8 @@ const Dashboard: NextPage = () => {
       Icon: <RiSettings4Fill className="h-[1.5rem] w-[1.5rem]" />,
     },
   ];
+
+  
 
   return (
     <div className="w-screen h-screen">
@@ -80,12 +86,14 @@ const Dashboard: NextPage = () => {
       {/* Body */}
       <div className={`flex ${styles.sidebar}`}>
         {/* SideBar */}
-        <div className="w-[20rem] flex flex-col items-center bg-bt-accent-bg  justify-between">
-          <div className="w-[70%] h-[6rem] bg-bt-tab-bg translate-y-20 rounded-lg flex flex-col justify-center items-center">
-            <span className="font-semibold text-[1.2rem]">Created Unit count</span>
+        <div className=" lg:w-[15rem] 2xl:w-[20rem] flex flex-col items-center bg-bt-accent-bg  justify-between">
+          <div className="w-[70%] h-[6rem] bg-bt-tab-bg lg:translate-y-5 2xl:translate-y-20 rounded-lg flex flex-col justify-center items-center">
+            <span className="font-semibold lg:text-[1.1rem] 2xl:text-[1.2rem]">
+              Created Unit Count
+            </span>
             <span className="font-semibold text-[1.2rem]">0</span>
           </div>
-          <div className="w-full h-full flex items-center flex-col gap-y-4 justify-center -translate-y-10">
+          <div className="w-full h-full flex items-center  flex-col gap-y-4 justify-center lg:-translate-y-5 2xl:-translate-y-10">
             {tabs.map((tab, index) => {
               return (
                 <DashTab
@@ -115,8 +123,62 @@ const Dashboard: NextPage = () => {
         </div>
 
         {/* Content */}
-
-        <div className={`${styles.body}`}></div>
+        <div className={`${styles.body} p-10`}>
+          <div className="flex flex-col gap-y-[1.5rem]">
+            <span className="font-bold text-[1.5rem] ">
+              Welcome Back, Aimen 😊
+            </span>
+            <div
+              onClick={(e) => {
+                const unit = document.querySelector(".unit-wrapper");
+                const unitTitle = document.querySelector(".unit-title");
+                if (unit) unit.classList.toggle("w-[12rem]");
+                if(unit?.classList.contains("w-[12rem]")) setUnitOpen(true);
+                else setUnitOpen(false);
+                if (unitTitle) unitTitle.classList.toggle("rotate-[0deg]");
+              }}
+              className="h-[15rem] w-[5rem] bg-bt-dark-gray rounded-xl flex flex-col items-center justify-between py-3 transition-all cursor-pointer duration-300 select-none unit-wrapper"
+            >
+              {/* Unit Logo */}
+              <div className="w-[3rem] h-[3rem] bg-white rounded-full  -translate-y-[1.7rem] ">
+                <Image
+                  className="object-cover rounded-full"
+                  src="https://yt3.ggpht.com/ytc/AKedOLRqfxjsxWJBNtziJ5XtVDx1BwbEYwmoJZxJFr-fJQ=s900-c-k-c0x00ffffff-no-rj"
+                  alt="unit-logo"
+                  width="100%"
+                  height="100%"
+                />
+              </div>
+              {/* Unit name */}
+              <span className="font-bold rotate-[270deg] transition-all unit-title duration-500">
+                International Office
+              </span>
+              {/* Unit actions */}
+              <div className="mt-auto flex justify-between gap-x-2">
+                <div
+                  className="w-[1.7rem] h-[1.7rem] bg-[#565672] rounded-full flex items-center justify-center"
+                  onClick={(e) => {
+                    //Prevent parents onClick event
+                    e.stopPropagation();
+                  }}
+                >
+                  <FiUsers />
+                </div>
+                <div
+                  className={`w-[1.7rem] h-[1.7rem] bg-[#565672] rounded-full flex items-center justify-center transition-all duration-300 ${
+                    unitOpen ? "block" : "hidden"
+                  } `}
+                  onClick={(e) => {
+                    //Prevent parents onClick event
+                    e.stopPropagation();
+                  }}
+                >
+                  <AiOutlineHourglass />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
