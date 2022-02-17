@@ -150,7 +150,7 @@ const Dashboard: NextPage = () => {
                 />
               </div>
               {/* Unit name */}
-              <span className="font-bold rotate-[270deg] transition-all unit-title duration-500">
+              <span className="font-bold rotate-[90deg] transition-all unit-title duration-500">
                 International Office
               </span>
               {/* Unit actions */}
