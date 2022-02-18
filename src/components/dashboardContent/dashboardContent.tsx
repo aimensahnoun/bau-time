@@ -32,16 +32,16 @@ const DashboardContent: FunctionComponent = () => {
               imgUrl="https://yt3.ggpht.com/ytc/AKedOLRqfxjsxWJBNtziJ5XtVDx1BwbEYwmoJZxJFr-fJQ=s900-c-k-c0x00ffffff-no-rj"
             />
             <Unit
-              title="International Office"
-              imgUrl="https://yt3.ggpht.com/ytc/AKedOLRqfxjsxWJBNtziJ5XtVDx1BwbEYwmoJZxJFr-fJQ=s900-c-k-c0x00ffffff-no-rj"
+              title="BAU Global"
+              imgUrl="https://media-exp1.licdn.com/dms/image/C4D0BAQHCeO3i9azL7g/company-logo_200_200/0/1547474008762?e=2159024400&v=beta&t=LBYgr2t9m38A8UItRXtyPa88UufuRJDNRAa68nqf1eQ"
             />
             <Unit
-              title="International Office"
-              imgUrl="https://yt3.ggpht.com/ytc/AKedOLRqfxjsxWJBNtziJ5XtVDx1BwbEYwmoJZxJFr-fJQ=s900-c-k-c0x00ffffff-no-rj"
+              title="Erasmus"
+              imgUrl="https://www.helixhelezon-courses.com/wp-content/uploads/2021/04/erasmus-logo.jpg"
             />
             <Unit
-              title="International Office"
-              imgUrl="https://yt3.ggpht.com/ytc/AKedOLRqfxjsxWJBNtziJ5XtVDx1BwbEYwmoJZxJFr-fJQ=s900-c-k-c0x00ffffff-no-rj"
+              title="DSO"
+              imgUrl="https://pbs.twimg.com/profile_images/1326282709250027521/pWL6v77N_400x400.jpg"
             />
           </div>
         </div>

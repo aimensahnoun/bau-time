@@ -12,6 +12,8 @@ import NotificationBell from "../components/notificationBell/notificationBell";
 import DashTab from "../components/dashTab/dashTab";
 import DashboardContent from "../components/dashboardContent/dashboardContent";
 import UnitContent from "../components/unitContent/unitContent";
+import EmployeesContent from "../components/employeesContent/employeesContent";
+import SettingsContent from "../components/settingsContent/settingsContent";
 
 //Icons import
 import { MdOutlineSpaceDashboard } from "react-icons/md";
@@ -56,6 +58,10 @@ const Dashboard: NextPage = () => {
         return <DashboardContent />;
       case 1:
         return <UnitContent />;
+      case 2:
+        return <EmployeesContent />;
+      case 3:
+        return <SettingsContent />;
       default:
         return <DashboardContent />;
     }

@@ -5,7 +5,8 @@ const withTM = require("next-transpile-modules")(["gsap"]);
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["images.pexels.com" , "yt3.ggpht.com"],
+    domains: ["images.pexels.com" , "yt3.ggpht.com" , "media-exp1.licdn.com" , "www.helixhelezon-courses.com" , "pbs.twimg.com"],
+    
   },
 };
 
