@@ -5,12 +5,13 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 
 //React import
-import { useState } from "react";
+import { useState, ReactElement } from "react";
 
 //Component import
 import NotificationBell from "../components/notificationBell/notificationBell";
 import DashTab from "../components/dashTab/dashTab";
-import Unit from "../components/unit/unit";
+import DashboardContent from "../components/dashboardContent/dashboardContent";
+import UnitContent from "../components/unitContent/unitContent";
 
 //Icons import
 import { MdOutlineSpaceDashboard } from "react-icons/md";
@@ -47,6 +48,18 @@ const Dashboard: NextPage = () => {
       Icon: <RiSettings4Fill className="h-[1.5rem] w-[1.5rem]" />,
     },
   ];
+
+  //Render content based on tab
+  const rendedBody = (): ReactElement => {
+    switch (currentTab) {
+      case 0:
+        return <DashboardContent />;
+      case 1:
+        return <UnitContent />;
+      default:
+        return <DashboardContent />;
+    }
+  };
 
   return (
     <div className="w-screen h-screen">
@@ -118,31 +131,7 @@ const Dashboard: NextPage = () => {
         </div>
 
         {/* Content */}
-        <div className={`${styles.body} p-10`}>
-          <div className="flex flex-col gap-y-[1.5rem]">
-            <span className="font-bold text-[1.5rem] ">
-              Welcome Back, Aimen 😊
-            </span>
-            <div className="flex min-w-[17rem] overflow-x-scroll items-center scroll h-[20rem] gap-x-3 no-scrollbar">
-              <Unit
-                title="International Office"
-                imgUrl="https://yt3.ggpht.com/ytc/AKedOLRqfxjsxWJBNtziJ5XtVDx1BwbEYwmoJZxJFr-fJQ=s900-c-k-c0x00ffffff-no-rj"
-              />
-              <Unit
-                title="International Office"
-                imgUrl="https://yt3.ggpht.com/ytc/AKedOLRqfxjsxWJBNtziJ5XtVDx1BwbEYwmoJZxJFr-fJQ=s900-c-k-c0x00ffffff-no-rj"
-              />
-              <Unit
-                title="International Office"
-                imgUrl="https://yt3.ggpht.com/ytc/AKedOLRqfxjsxWJBNtziJ5XtVDx1BwbEYwmoJZxJFr-fJQ=s900-c-k-c0x00ffffff-no-rj"
-              />
-              <Unit
-                title="International Office"
-                imgUrl="https://yt3.ggpht.com/ytc/AKedOLRqfxjsxWJBNtziJ5XtVDx1BwbEYwmoJZxJFr-fJQ=s900-c-k-c0x00ffffff-no-rj"
-              />
-            </div>
-          </div>
-        </div>
+        {rendedBody()}
       </div>
     </div>
   );

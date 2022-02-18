@@ -70,3 +70,11 @@ a {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+.sidebar {
+  height: calc(100% - 5rem);
+}
+
+.dash-body {
+  width: calc(100% - 20rem);
+}
