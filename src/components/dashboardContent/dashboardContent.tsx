@@ -13,7 +13,7 @@ import { dashboardTabsVariants } from "../../utils/page-transition";
 
 const DashboardContent: FunctionComponent = () => {
   return (
-    <AnimatePresence>
+    <AnimatePresence exitBeforeEnter>
       <motion.div
         variants={dashboardTabsVariants}
         initial="hidden"
