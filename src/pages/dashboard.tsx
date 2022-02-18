@@ -10,6 +10,7 @@ import { useState } from "react";
 //Component import
 import NotificationBell from "../components/notificationBell/notificationBell";
 import DashTab from "../components/dashTab/dashTab";
+import Unit from "../components/unit/unit";
 
 //Icons import
 import { MdOutlineSpaceDashboard } from "react-icons/md";
@@ -17,7 +18,6 @@ import { HiOutlineOfficeBuilding } from "react-icons/hi";
 import { FiUsers } from "react-icons/fi";
 import { RiSettings4Fill } from "react-icons/ri";
 import { CgLogOut } from "react-icons/cg";
-import { AiOutlineHourglass } from "react-icons/ai";
 
 //CSS import
 import styles from "../styles/dashboard.module.css";
@@ -27,9 +27,6 @@ const Dashboard: NextPage = () => {
 
   //Current tab index
   const [currentTab, setCurrentTab] = useState(0);
-
-  //Checking if unit is open
-  const [unitOpen, setUnitOpen] = useState(false);
 
   //Tabs array
   const tabs = [
@@ -50,8 +47,6 @@ const Dashboard: NextPage = () => {
       Icon: <RiSettings4Fill className="h-[1.5rem] w-[1.5rem]" />,
     },
   ];
-
-  
 
   return (
     <div className="w-screen h-screen">
@@ -128,54 +123,23 @@ const Dashboard: NextPage = () => {
             <span className="font-bold text-[1.5rem] ">
               Welcome Back, Aimen 😊
             </span>
-            <div
-              onClick={(e) => {
-                const unit = document.querySelector(".unit-wrapper");
-                const unitTitle = document.querySelector(".unit-title");
-                if (unit) unit.classList.toggle("w-[12rem]");
-                if(unit?.classList.contains("w-[12rem]")) setUnitOpen(true);
-                else setUnitOpen(false);
-                if (unitTitle) unitTitle.classList.toggle("rotate-[0deg]");
-              }}
-              className="h-[15rem] w-[5rem] bg-bt-dark-gray rounded-xl flex flex-col items-center justify-between py-3 transition-all cursor-pointer duration-300 select-none unit-wrapper"
-            >
-              {/* Unit Logo */}
-              <div className="w-[3rem] h-[3rem] bg-white rounded-full  -translate-y-[1.7rem] ">
-                <Image
-                  className="object-cover rounded-full"
-                  src="https://yt3.ggpht.com/ytc/AKedOLRqfxjsxWJBNtziJ5XtVDx1BwbEYwmoJZxJFr-fJQ=s900-c-k-c0x00ffffff-no-rj"
-                  alt="unit-logo"
-                  width="100%"
-                  height="100%"
-                />
-              </div>
-              {/* Unit name */}
-              <span className="font-bold rotate-[90deg] transition-all unit-title duration-500">
-                International Office
-              </span>
-              {/* Unit actions */}
-              <div className="mt-auto flex justify-between gap-x-2">
-                <div
-                  className="w-[1.7rem] h-[1.7rem] bg-[#565672] rounded-full flex items-center justify-center"
-                  onClick={(e) => {
-                    //Prevent parents onClick event
-                    e.stopPropagation();
-                  }}
-                >
-                  <FiUsers />
-                </div>
-                <div
-                  className={`w-[1.7rem] h-[1.7rem] bg-[#565672] rounded-full flex items-center justify-center transition-all duration-300 ${
-                    unitOpen ? "block" : "hidden"
-                  } `}
-                  onClick={(e) => {
-                    //Prevent parents onClick event
-                    e.stopPropagation();
-                  }}
-                >
-                  <AiOutlineHourglass />
-                </div>
-              </div>
+            <div className="flex min-w-[17rem] overflow-x-scroll items-center scroll h-[20rem] gap-x-3 no-scrollbar">
+              <Unit
+                title="International Office"
+                imgUrl="https://yt3.ggpht.com/ytc/AKedOLRqfxjsxWJBNtziJ5XtVDx1BwbEYwmoJZxJFr-fJQ=s900-c-k-c0x00ffffff-no-rj"
+              />
+              <Unit
+                title="International Office"
+                imgUrl="https://yt3.ggpht.com/ytc/AKedOLRqfxjsxWJBNtziJ5XtVDx1BwbEYwmoJZxJFr-fJQ=s900-c-k-c0x00ffffff-no-rj"
+              />
+              <Unit
+                title="International Office"
+                imgUrl="https://yt3.ggpht.com/ytc/AKedOLRqfxjsxWJBNtziJ5XtVDx1BwbEYwmoJZxJFr-fJQ=s900-c-k-c0x00ffffff-no-rj"
+              />
+              <Unit
+                title="International Office"
+                imgUrl="https://yt3.ggpht.com/ytc/AKedOLRqfxjsxWJBNtziJ5XtVDx1BwbEYwmoJZxJFr-fJQ=s900-c-k-c0x00ffffff-no-rj"
+              />
             </div>
           </div>
         </div>
