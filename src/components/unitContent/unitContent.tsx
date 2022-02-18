@@ -1,5 +1,5 @@
 //React component
-import { FunctionComponent } from "react";
+import { FunctionComponent, useState } from "react";
 
 //FramerMotion import
 import { motion, AnimatePresence } from "framer-motion";
@@ -14,9 +14,12 @@ import { BiPlus } from "react-icons/bi";
 import Modal from "../modal/modal";
 
 const UnitContent: FunctionComponent = () => {
+  //Modal state
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <AnimatePresence exitBeforeEnter>
-        <Modal />
+      <Modal title="Add Unit" isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
       <motion.div
         variants={dashboardTabsVariants}
         initial="hidden"
@@ -28,7 +31,7 @@ const UnitContent: FunctionComponent = () => {
         <div className="flex flex-col gap-y-[1.5rem]">
           <div className="flex justify-between items-center">
             <span className="font-bold text-[1.5rem] ">Units</span>
-            <div className="p-2 min-w-[5rem] h-[2.5rem] rounded-lg flex items-center cursor-pointer bg-bt-tab-bg ">
+            <div className="p-2 min-w-[5rem] h-[2.5rem] rounded-lg flex items-center cursor-pointer bg-bt-tab-bg " onClick={() => setIsModalOpen(true)} >
               <BiPlus className="text-white text-[1.1rem]" />
               <span>Add Unit</span>
             </div>
