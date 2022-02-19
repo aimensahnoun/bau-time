@@ -68,7 +68,7 @@ const Dashboard: NextPage = () => {
   };
 
   return (
-    <div className="w-screen h-screen">
+    <div className="w-screen h-screen overflow-hidden">
       <Head>
         <title>BAU Time | Dashboard</title>
       </Head>
@@ -98,9 +98,11 @@ const Dashboard: NextPage = () => {
       </nav>
 
       {/* Body */}
-      <div className={`flex ${styles.sidebar}`}>
+      <div className={`flex w-full h-full overflow-hidden`}>
         {/* SideBar */}
-        <div className=" lg:w-[15rem] 2xl:w-[20rem] flex flex-col items-center bg-bt-accent-bg  justify-between">
+        <div
+          className={` lg:w-[15rem] 2xl:w-[20rem] flex flex-col items-center bg-bt-accent-bg  justify-between ${styles.sidebar} `}
+        >
           <div className="w-[70%] h-[6rem] bg-bt-tab-bg lg:translate-y-5 2xl:translate-y-20 rounded-lg flex flex-col justify-center items-center">
             <span className="font-semibold lg:text-[1.1rem] 2xl:text-[1.2rem]">
               Created Unit Count

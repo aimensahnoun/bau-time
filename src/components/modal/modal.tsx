@@ -13,7 +13,12 @@ interface ModalProps {
   title: string;
 }
 
-const Modal: FunctionComponent<ModalProps> = ({ isOpen, setIsOpen, title }) => {
+const Modal: FunctionComponent<ModalProps> = ({
+  isOpen,
+  setIsOpen,
+  title,
+  children,
+}) => {
   //Backdrop animation
   const backdropVariants = {
     hidden: { opacity: 0 },
@@ -42,10 +47,10 @@ const Modal: FunctionComponent<ModalProps> = ({ isOpen, setIsOpen, title }) => {
             initial="hidden"
             animate="enter"
             exit="hidden"
-            className="min-w-[30%] min-h-[50%] bg-bt-accent-bg rounded-lg p-4"
+            className={`md:w-[50%] xl:w-[30%] h-[50%] max-h-fit bg-bt-accent-bg rounded-lg p-4 overflow-auto`}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex w-full items-center justify-between">
+            <div className="flex w-full items-center justify-between mb-[1rem] ">
               <span className="font-bold  text-[1.5rem]">{title}</span>
               <div
                 className="bg-bt-tab-bg w-[2rem] h-[2rem] rounded-full flex justify-center items-center cursor-pointer"
@@ -54,6 +59,8 @@ const Modal: FunctionComponent<ModalProps> = ({ isOpen, setIsOpen, title }) => {
                 <MdClose className="text-white text-[1.3rem]" />
               </div>
             </div>
+            {/* Content goes here */}
+            <div className=" h-[*] max-h-fit flex flex-col">{children}</div>
           </motion.div>
         </motion.div>
       ) : null}

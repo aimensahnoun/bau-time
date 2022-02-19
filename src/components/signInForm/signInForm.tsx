@@ -15,13 +15,20 @@ const SignInForm: FunctionComponent<{}> = () => {
 
   //Login handler
   const handleLogin = (): void => {
-    if (password === "" || userName === "") return alert("Please fill in all fields");
+    if (password === "" || userName === "")
+      return alert("Please fill in all fields");
     //Forward user to dashboard page
     router.push("/dashboard");
   };
 
   return (
-    <div className=" w-[90%] md:w-[40rem] lg:h-[20rem] bg-bt-accent-bg rounded-lg p-2 flex items-center flex-col login-wrapper">
+    <div
+      className=" w-[90%] md:w-[40rem] lg:h-[20rem] bg-bt-accent-bg rounded-lg p-2 flex items-center flex-col login-wrapper"
+      onKeyDown={(e) => {
+        if (e.key !== "Enter") return;
+        handleLogin();
+      }}
+    >
       <span className="font-bold text-[2rem] mb-8">Login</span>
       <input
         className=" w-[90%] md:w-[23rem] h-[2rem] bg-bt-form-bg rounded-lg border-[1px] border-bt-dark-gray p-2 outline-none focus:border-gray-300 mb-4"

@@ -11,7 +11,7 @@ import { dashboardTabsVariants } from "../../utils/page-transition";
 import { BiPlus } from "react-icons/bi";
 
 //Component import
-import Modal from "../modal/modal";
+import AddUnit from "../addUnit/addUnit";
 
 const UnitContent: FunctionComponent = () => {
   //Modal state
@@ -19,7 +19,7 @@ const UnitContent: FunctionComponent = () => {
 
   return (
     <AnimatePresence exitBeforeEnter>
-      <Modal title="Add Unit" isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
+      <AddUnit isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
       <motion.div
         variants={dashboardTabsVariants}
         initial="hidden"
@@ -31,7 +31,10 @@ const UnitContent: FunctionComponent = () => {
         <div className="flex flex-col gap-y-[1.5rem]">
           <div className="flex justify-between items-center">
             <span className="font-bold text-[1.5rem] ">Units</span>
-            <div className="p-2 min-w-[5rem] h-[2.5rem] rounded-lg flex items-center cursor-pointer bg-bt-tab-bg " onClick={() => setIsModalOpen(true)} >
+            <div
+              className="p-2 min-w-[5rem] h-[2.5rem] rounded-lg flex items-center cursor-pointer bg-bt-tab-bg "
+              onClick={() => setIsModalOpen(true)}
+            >
               <BiPlus className="text-white text-[1.1rem]" />
               <span>Add Unit</span>
             </div>
