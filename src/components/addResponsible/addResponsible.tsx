@@ -120,17 +120,15 @@ const AddResponsible: FunctionComponent<AddResponsibleProps> = ({
         />
       </div>
 
-       {/* Responsibe password input  */}
-       <div className="relative flex flex-col">
+      {/* Responsibe password input  */}
+      <div className="relative flex flex-col">
         <span className="font-medium text-[1.1rem] mb-2">Username:</span>
         <input
-         
           type="password"
           className="w-[90%] md:w-[50%] h-[2rem] bg-bt-form-bg rounded-lg border-[1px] border-bt-dark-gray p-2 outline-none focus:border-gray-300 mb-2"
           placeholder="Password"
         />
       </div>
-
 
       {/* Submit */}
       <div
