@@ -25,7 +25,7 @@ const EmployeeTableItem: FunctionComponent<EmployeeTableItemProps> = ({
             src={imgUrl}
             width="100%"
             height="100%"
-            alt="unit logo"
+            alt="unit logoo"
             className="rounded-full object-cover"
           />
         </div>
