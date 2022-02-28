@@ -1,9 +1,10 @@
 //NextJS import
 import type { NextPage } from "next";
 import Head from "next/head";
+import { useRouter } from "next/router";
 
 //React import
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 //Depedencies import
 import gsap from "gsap";
@@ -11,7 +12,26 @@ import gsap from "gsap";
 //Components import
 import SignInForm from "../components/signInForm/signInForm";
 
+//Supabase import
+import supabase from "../utils/supabase";
+
+//Dependencies import
+import ClipLoader from "react-spinners/ClipLoader";
+
 const Home: NextPage = () => {
+  //Initial loading state
+  const [isLoading, setIsLoading] = useState(true);
+
+  //router
+  const router = useRouter();
+
+  //Checking if use is logged in
+  useEffect(() => {
+    const user = supabase.auth.user();
+    if (user) router.push("/dashboard");
+    else setIsLoading(false);
+  }, []);
+
   //Logo animation
   useEffect(() => {
     gsap.fromTo(
@@ -30,7 +50,11 @@ const Home: NextPage = () => {
     );
   }, []);
 
-  return (
+  return isLoading ? (
+    <div className="w-screen h-screen flex justify-center items-center">
+      <ClipLoader color={"#fff"} loading={true} size={50} />
+    </div>
+  ) : (
     <div className="w-screen h-screen ">
       <Head>
         <title>BAU Time</title>
