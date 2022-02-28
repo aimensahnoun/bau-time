@@ -5,7 +5,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 
 //React import
-import { useState, ReactElement } from "react";
+import { useState, ReactElement, useEffect } from "react";
 
 //Component import
 import NotificationBell from "../components/notificationBell/notificationBell";
@@ -25,8 +25,24 @@ import { CgLogOut } from "react-icons/cg";
 //CSS import
 import styles from "../styles/dashboard.module.css";
 
+//Supabase import
+import supabase from "../utils/supabase";
+
+//Dependencies import
+import ClipLoader from "react-spinners/ClipLoader";
+
 const Dashboard: NextPage = () => {
   const router = useRouter();
+
+  //Initial loading state
+  const [isLoading, setIsLoading] = useState(true);
+
+  //Checking if use is logged in
+  useEffect(() => {
+    const user = supabase.auth.user();
+    if (!user) router.push("/");
+    else setIsLoading(false);
+  }, []);
 
   //Current tab index
   const [currentTab, setCurrentTab] = useState(0);
@@ -67,7 +83,11 @@ const Dashboard: NextPage = () => {
     }
   };
 
-  return (
+  return isLoading ? (
+    <div className="w-screen h-screen flex justify-center items-center">
+      <ClipLoader color={"#fff"} loading={true} size={50} />
+    </div>
+  ) : (
     <div className="w-screen h-screen overflow-hidden">
       <Head>
         <title>BAU Time | Dashboard</title>
