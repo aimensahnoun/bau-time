@@ -82,7 +82,7 @@ const AddResponsible: FunctionComponent<AddResponsibleProps> = ({
       const response = await result.json();
       await supabase.from("workers").insert({
         name: data.name,
-        type: "fullTime",
+        type: "Responsible",
         imgUrl: imageUrl,
         id: response.user.id,
       });
