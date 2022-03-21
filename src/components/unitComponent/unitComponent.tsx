@@ -8,28 +8,35 @@ import Image from "next/image"
 import { AiOutlineHourglass } from "react-icons/ai";
 import { FiUsers } from "react-icons/fi";
 
-const UnitComponent : FunctionComponent = () => {
+//recoil import
+import {Unit} from "../../recoil/state"
+import CustomImage from "../customImage/customImage";
+
+interface UnitComponentProps {
+  unit : Unit
+}
+
+const UnitComponent : FunctionComponent<UnitComponentProps> = ({unit}) => {
     return   <div
     className={`h-[12rem] bg-bt-dark-gray rounded-xl flex flex-col items-center justify-between py-3 transition-all cursor-pointer duration-300 select-none w-[11rem]
 `}
   >
     {/* Unit Logo */}
     <div className="w-[3rem] h-[3rem] bg-white rounded-full  -translate-y-[1.7rem] ">
-      <Image
+      <CustomImage
         className="object-cover rounded-full"
-        src={
-          "https://yt3.ggpht.com/ytc/AKedOLRqfxjsxWJBNtziJ5XtVDx1BwbEYwmoJZxJFr-fJQ=s900-c-k-c0x00ffffff-no-rj"
-        }
+        src={unit.imgUrl}
         alt="unit-logo"
         width="100%"
         height="100%"
+        layout="fill"
       />
     </div>
     {/* Unit name */}
     <span
       className={`font-bold transition-all unit-title duration-500   `}
     >
-      International Office
+      {unit.name}
     </span>
     {/* Unit actions */}
     <div className="mt-auto flex justify-between gap-x-2">

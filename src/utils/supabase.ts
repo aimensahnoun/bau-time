@@ -16,14 +16,17 @@ const supabase = createClient(
 );
 
 export const fetchInitialData = async (props) => {
-  const { setEmployees } = props;
+  const { setEmployees , setUnits } = props;
 
-  const { data, error } = await supabase.from("workers").select();
-  if (!error) setEmployees(data);
+  const wrokersResult = await supabase.from("workers").select();
+  if (!wrokersResult.error) setEmployees(wrokersResult.data);
+
+  const unitResult = await supabase.from("units").select();
+  if (!unitResult.error) setUnits(unitResult.data);
 };
 
 export const listenToData = async (props) => {
-  const { setEmployees } = props;
+  const { setEmployees , setUnits } = props;
 
   supabase
     .from("workers")
@@ -34,6 +37,18 @@ export const listenToData = async (props) => {
       if (!data) return;
 
       setEmployees(data);
+    })
+    .subscribe();
+
+  supabase
+    .from("units")
+    .on("*", async (payload) => {
+      const { data, error } = await supabase.from("units").select();
+      console.log(error);
+      if (error) return;
+      if (!data) return;
+
+      setUnits(data);
     })
     .subscribe();
 };

@@ -9,7 +9,7 @@ import { useState, useLayoutEffect } from "react";
 
 //Recoil import
 import { RecoilRoot, useRecoilState } from "recoil";
-import { employeesState } from "../recoil/state";
+import { employeesState , unitsState } from "../recoil/state";
 
 //Supabase import
 import supabase, { listenToData, fetchInitialData } from "../utils/supabase";
@@ -23,6 +23,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   //Recoil State
   const [_employees, setEmployees] = useRecoilState(employeesState);
+  const [_units, setUnits] = useRecoilState(unitsState);
 
   //Router
   const router = useRouter();
@@ -34,8 +35,8 @@ function MyApp({ Component, pageProps }: AppProps) {
       router.replace("/");
     }
 
-    fetchInitialData({ setEmployees });
-    listenToData({ setEmployees });
+    fetchInitialData({ setEmployees , setUnits });
+    listenToData({ setEmployees , setUnits});
 
     setIsLoading(false);
   }, []);

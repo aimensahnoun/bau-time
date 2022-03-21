@@ -19,9 +19,18 @@ import { AiOutlineHourglass } from "react-icons/ai";
 import AddUnit from "../addUnit/addUnit";
 import UnitComponent from "../unitComponent/unitComponent";
 
+//recoil import
+import { useRecoilValue } from "recoil";
+import { unitsState } from "../../recoil/state";
+
 const UnitContent: FunctionComponent = () => {
+  //Recoil state
+  const units = useRecoilValue(unitsState);
+
   //Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  console.log(units);
 
   return (
     <AnimatePresence exitBeforeEnter>
@@ -49,11 +58,10 @@ const UnitContent: FunctionComponent = () => {
 
           {/* Body */}
           <div className="">
-            <div className="grid gap-x-3 gap-y-6 grid-cols-4">
-              <UnitComponent />
-              <UnitComponent />
-              <UnitComponent />
-              <UnitComponent />
+            <div className="grid gap-x-3 gap-y-6 grid-cols-4 2xl:grid-cols-10">
+              {units.map((unit) => {
+                return <UnitComponent key={unit.id} unit={unit}  />;
+              })}
             </div>
           </div>
         </div>
