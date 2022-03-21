@@ -5,7 +5,7 @@ import { FunctionComponent, useState } from "react";
 import Image from "next/image";
 
 //React import
-import {useLayoutEffect} from "react"
+import { useLayoutEffect } from "react";
 
 //FramerMotion import
 import { motion, AnimatePresence } from "framer-motion";
@@ -25,15 +25,14 @@ import { employeesState } from "../../recoil/state";
 
 //supabase import
 import supabase from "../../utils/supabase";
+import CustomImage from "../customImage/customImage";
 
 const EmployeesContent: FunctionComponent = () => {
   //UseState
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   //Recoil State
-  const [employees , setEmployees] = useRecoilState(employeesState);
-
-  
+  const [employees, setEmployees] = useRecoilState(employeesState);
 
   useLayoutEffect(() => {
     (async () => {
@@ -42,8 +41,7 @@ const EmployeesContent: FunctionComponent = () => {
       if (!data) return;
       setEmployees(data);
     })();
-  } , [])
-
+  }, []);
 
   return (
     <AnimatePresence exitBeforeEnter>
@@ -80,29 +78,32 @@ const EmployeesContent: FunctionComponent = () => {
             return (
               <div
                 key={employee.id}
-                className={`h-[12rem] bg-bt-dark-gray rounded-xl flex flex-col items-center justify-between py-3 transition-all cursor-pointer duration-300 select-none w-[11rem]
+                className={`h-[12rem] bg-bt-dark-gray rounded-xl flex flex-col items-center py-3 transition-all cursor-pointer duration-300 select-none w-[11rem]
 `}
               >
-                {/* Unit Logo */}
+                {/* Employee image */}
                 <div className="w-[3rem] h-[3rem] bg-white rounded-full  -translate-y-[1.7rem] ">
-                  <Image
-                    className="object-cover rounded-full"
-                    src={
-                      "https://yt3.ggpht.com/ytc/AKedOLRqfxjsxWJBNtziJ5XtVDx1BwbEYwmoJZxJFr-fJQ=s900-c-k-c0x00ffffff-no-rj"
-                    }
-                    alt="unit-logo"
-                    width="100%"
+                  <CustomImage
+                    src={employee.imgUrl}
+                    alt="employee image"
                     height="100%"
+                    layout="fill"
+                    width="100%"
+                    className="rounded-full"
                   />
                 </div>
-                {/* Unit name */}
+                {/* employee name */}
                 <span
-                  className={`font-bold transition-all unit-title duration-500   `}
+                  className={`font-bold transition-all unit-title duration-500  text-ellipsis whitespace-nowrap overflow-hiddens`}
                 >
-                  International Office
+                  {employee.name}
                 </span>
-                {/* Unit actions */}
-                <div className="mt-auto flex justify-between gap-x-2"></div>
+
+                <span
+                  className={`font-medium text-[.8rem] transition-all unit-title duration-500  text-ellipsis whitespace-nowrap overflow-hiddens`}
+                >
+                  {employee.type === "fullTime" ? "Responsible" : "Assistant"}
+                </span>
               </div>
             );
           })}

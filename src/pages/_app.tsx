@@ -32,7 +32,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     const user = supabase.auth.user();
     if (!user) {
       setIsLoading(false);
-      router.replace("/auth");
+      router.replace("/");
     }
 
     console.log("Running the first time");
