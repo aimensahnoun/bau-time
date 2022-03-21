@@ -22,7 +22,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { name, email, password } = req.body;
+  const { name, email, password  } = req.body;
 
   if (!name || !email || !password) {
     return res.status(400).json({

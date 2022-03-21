@@ -17,6 +17,11 @@ import { AiFillDelete } from "react-icons/ai";
 //Form import
 import { useForm } from "react-hook-form";
 
+//Utils import
+import { uploadFile, avatarImage } from "../../utils/upload-file";
+import supabase from "../../utils/supabase";
+
+
 interface AddResponsibleProps {
   isModalOpen: boolean;
   setIsModalOpen: (isModalOpen: boolean) => void;
@@ -58,15 +63,35 @@ const AddResponsible: FunctionComponent<AddResponsibleProps> = ({
     watch,
     formState: { errors },
   } = useForm<FormValues>();
-  const onSubmit = (data: FormValues) => {
-    fetch("/api/createResponsible", {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify(data),
-    });
+  const onSubmit = async (data: FormValues) => {
+    try {
+      const imageUrl = profileImage
+        ? await uploadFile(profileImage, "image")
+        : avatarImage;
+
+      const result = await fetch("/api/createResponsible", {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify(data),
+      });
+
+      const response = await result.json();
+
+      console.log(response.user.id);
+      await supabase.from("workers").insert({
+        name : data.name,
+        type : "fullTime",
+        imgUrl : imageUrl,
+        id : response.user.id,
+      })
+
+
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   type FormValues = {

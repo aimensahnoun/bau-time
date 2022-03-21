@@ -2,6 +2,8 @@
 import { Web3Storage } from "web3.storage";
 import imageCompression from "browser-image-compression";
 
+export const avatarImage =
+  "https://bafybeihj2j6solt4kbl6doc7w2vw7e5eqgc66fsuzpattjnn4mjhxici7y.ipfs.dweb.link/avatar.png";
 
 var options = {
   maxSizeMB: 1,
