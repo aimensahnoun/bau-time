@@ -1,6 +1,9 @@
 //React component
 import { FunctionComponent, useState } from "react";
 
+//NextJS import
+import Image from "next/image";
+
 //FramerMotion import
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -48,28 +51,30 @@ const EmployeesContent: FunctionComponent = () => {
         {/* Body */}
 
         <div className="flex flex-col gap-y-0 mt-[1.5rem]">
-          {/* Table header */}
-          <div className="w-full bg-bt-tab-bg h-[2.5rem] border-b-[1px] border-bt-form-bg flex items-center px-4 mb-3">
-            <span className="w-[20%] font-medium text-[1.3rem]">Employee</span>
-            <span className="w-[20%] font-medium text-[1.3rem]">
-              Employee Unit
+          <div
+            className={`h-[12rem] bg-bt-dark-gray rounded-xl flex flex-col items-center justify-between py-3 transition-all cursor-pointer duration-300 select-none w-[11rem]
+`}
+          >
+            {/* Unit Logo */}
+            <div className="w-[3rem] h-[3rem] bg-white rounded-full  -translate-y-[1.7rem] ">
+              <Image
+                className="object-cover rounded-full"
+                src={
+                  "https://yt3.ggpht.com/ytc/AKedOLRqfxjsxWJBNtziJ5XtVDx1BwbEYwmoJZxJFr-fJQ=s900-c-k-c0x00ffffff-no-rj"
+                }
+                alt="unit-logo"
+                width="100%"
+                height="100%"
+              />
+            </div>
+            {/* Unit name */}
+            <span
+              className={`font-bold transition-all unit-title duration-500   `}
+            >
+              International Office
             </span>
-            <span className="w-[15%] font-medium text-[1.3rem]">
-              Employement Type
-            </span>
-
-            <span className="w-[15%] font-medium text-[1.3rem]">Edit</span>
-            <span className="w-[15%] font-medium text-[1.3rem]">Delete</span>
-          </div>
-
-          {/* Table content */}
-          <div className="flex flex-col gap-y-3 h-[70vh] overflow-y-scroll pb-4">
-            <EmployeeTableItem
-              imgUrl="https://images.pexels.com/photos/3785079/pexels-photo-3785079.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-              employeeName="John Doe"
-              employeeUnit="International Student Office"
-              employmentType="Full Time"
-            />
+            {/* Unit actions */}
+            <div className="mt-auto flex justify-between gap-x-2"></div>
           </div>
         </div>
       </motion.div>

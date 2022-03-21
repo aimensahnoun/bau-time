@@ -14,6 +14,9 @@ import Avatar from "../../../public/assets/avatar.png";
 import { HiUpload } from "react-icons/hi";
 import { AiFillDelete } from "react-icons/ai";
 
+//Form import
+import { useForm } from "react-hook-form";
+
 interface AddResponsibleProps {
   isModalOpen: boolean;
   setIsModalOpen: (isModalOpen: boolean) => void;
@@ -25,16 +28,15 @@ const AddResponsible: FunctionComponent<AddResponsibleProps> = ({
 }) => {
   const bosses = ["Mehmet Yiğit Tay", "Aylin Can", "Hamdi Bey", "Yiğit Şimşek"];
 
+  //UseState
   // Checking if responsible input is active
   const [isResponsibleActive, setIsResponsibleActive] = useState(false);
-
   const [filteredBosses, setFilteredBosses] = useState(bosses);
-
   // Storing selected responsible name
   const [selectedResponsible, setSelectedResponsible] = useState("");
-
   const [profileImage, setProfileImage] = useState<File | null>(null);
 
+  //Use Ref
   const imageRef = useRef<HTMLInputElement | null>(null);
 
   // Filtering responsible list based on input
@@ -48,6 +50,30 @@ const AddResponsible: FunctionComponent<AddResponsibleProps> = ({
     );
     setFilteredBosses(newList);
   }, [selectedResponsible]);
+
+  //Form Hook
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<FormValues>();
+  const onSubmit = (data: FormValues) => {
+    fetch("/api/createResponsible", {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  };
+
+  type FormValues = {
+    name: string;
+    email: string;
+    password: string;
+  };
 
   return (
     <Modal
@@ -98,45 +124,63 @@ const AddResponsible: FunctionComponent<AddResponsibleProps> = ({
         />
       </div>
 
-      {/* Responsible full name input */}
-      <span className="font-medium text-[1.1rem] mb-2">Full Name:</span>
-      <input
-        type="text"
-        className="w-[90%] md:w-[50%] h-[2rem] bg-bt-form-bg rounded-lg border-[1px] border-bt-dark-gray p-2 outline-none focus:border-gray-300 mb-2"
-        placeholder="John Doe"
-      />
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex flex-col mt-2">
+          {/* Responsible full name input */}
+          <span className="font-medium text-[1.1rem] mb-2">Full Name:</span>
+          <input
+            {...register("name", { required: true })}
+            type="text"
+            className="w-[90%] md:w-[50%] h-[2rem] bg-bt-form-bg rounded-lg border-[1px] border-bt-dark-gray p-2 outline-none focus:border-gray-300 mb-2"
+            placeholder="John Doe"
+          />
+          {errors.name && (
+            <span className="text-red-600">This field is required</span>
+          )}
+        </div>
 
-      {/* Responsibe username input  */}
-      <div className="relative flex flex-col">
-        <span className="font-medium text-[1.1rem] mb-2">Username:</span>
-        <input
-          onFocus={() => setIsResponsibleActive(true)}
-          onBlur={() => setIsResponsibleActive(false)}
-          value={selectedResponsible}
-          onChange={(e) => setSelectedResponsible(e.target.value)}
-          type="text"
-          className="w-[90%] md:w-[50%] h-[2rem] bg-bt-form-bg rounded-lg border-[1px] border-bt-dark-gray p-2 outline-none focus:border-gray-300 mb-2"
-          placeholder="john.doe"
-        />
-      </div>
+        {/* Responsibe username input  */}
+        <div className="relative flex flex-col">
+          <span className="font-medium text-[1.1rem] mb-2">Email:</span>
+          <input
+            {...register("email", { required: true })}
+            type="email"
+            className="w-[90%] md:w-[50%] h-[2rem] bg-bt-form-bg rounded-lg border-[1px] border-bt-dark-gray p-2 outline-none focus:border-gray-300 mb-2"
+            placeholder="john.doe@bahcesehir.edu.tr"
+          />
+          {errors.email && (
+            <span className="text-red-600">This field is required</span>
+          )}
+        </div>
 
-      {/* Responsibe password input  */}
-      <div className="relative flex flex-col">
-        <span className="font-medium text-[1.1rem] mb-2">Username:</span>
-        <input
-          type="password"
-          className="w-[90%] md:w-[50%] h-[2rem] bg-bt-form-bg rounded-lg border-[1px] border-bt-dark-gray p-2 outline-none focus:border-gray-300 mb-2"
-          placeholder="Password"
-        />
-      </div>
+        {/* Responsibe password input  */}
+        <div className="relative flex flex-col">
+          <span className="font-medium text-[1.1rem] mb-2">Password:</span>
+          <input
+            type="password"
+            {...register("password", {
+              required: { value: true, message: "This field is required" },
+              minLength: {
+                value: 6,
+                message: "Password must be at least 6 characters long",
+              },
+            })}
+            className="w-[90%] md:w-[50%] h-[2rem] bg-bt-form-bg rounded-lg border-[1px] border-bt-dark-gray p-2 outline-none focus:border-gray-300 mb-2"
+            placeholder="Password"
+          />
+          {errors.password && (
+            <span className="text-red-600">{errors.password.message}</span>
+          )}
+        </div>
 
-      {/* Submit */}
-      <div
-        className="p-2 w-fit h-[2.5rem] rounded-lg flex items-center cursor-pointer bg-bt-tab-bg mt-auto ml-auto"
-        onClick={() => setIsModalOpen(false)}
-      >
-        <span>Add Responsible</span>
-      </div>
+        {/* Submit */}
+        <button
+          className="p-2 w-fit h-[2.5rem] rounded-lg flex items-center cursor-pointer bg-bt-tab-bg mt-auto ml-auto"
+          type="submit"
+        >
+          Add Responsible
+        </button>
+      </form>
     </Modal>
   );
 };

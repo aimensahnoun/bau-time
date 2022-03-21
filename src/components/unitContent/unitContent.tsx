@@ -54,9 +54,6 @@ const UnitContent: FunctionComponent = () => {
               <UnitComponent />
               <UnitComponent />
               <UnitComponent />
-              <UnitComponent />
-              <UnitComponent />
-              <UnitComponent />
             </div>
           </div>
         </div>

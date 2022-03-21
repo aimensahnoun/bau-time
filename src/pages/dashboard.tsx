@@ -149,6 +149,7 @@ const Dashboard: NextPage = () => {
               title="Logout"
               isActive={false}
               onClick={() => {
+                supabase.auth.signOut()
                 router.push("/");
               }}
               className=""

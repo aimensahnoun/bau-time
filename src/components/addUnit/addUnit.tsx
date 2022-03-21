@@ -14,6 +14,11 @@ import Avatar from "../../../public/assets/avatar.png";
 import { HiUpload } from "react-icons/hi";
 import { AiFillDelete } from "react-icons/ai";
 
+//supabase import
+import supabase from "../../utils/supabase";
+
+import { uploadFile } from "../../utils/upload-file";
+
 interface AddUnitProps {
   isModalOpen: boolean;
   setIsModalOpen: (isModalOpen: boolean) => void;
@@ -36,6 +41,10 @@ const AddUnit: FunctionComponent<AddUnitProps> = ({
   const [profileImage, setProfileImage] = useState<File | null>(null);
 
   const imageRef = useRef<HTMLInputElement | null>(null);
+
+  const [unitName, setUnitName] = useState("");
+
+  const [isLoading, setIsLoading] = useState(false);
 
   // Filtering responsible list based on input
   useEffect(() => {
@@ -97,6 +106,7 @@ const AddUnit: FunctionComponent<AddUnitProps> = ({
       {/* Title input */}
       <span className="font-medium text-[1.1rem] mb-2">Unit Title:</span>
       <input
+        onChange={(e) => setUnitName(e.target.value)}
         type="text"
         className="w-[90%] md:w-[50%] h-[2rem] bg-bt-form-bg rounded-lg border-[1px] border-bt-dark-gray p-2 outline-none focus:border-gray-300 mb-2"
         placeholder="Dean Of Students Office"
@@ -142,8 +152,29 @@ const AddUnit: FunctionComponent<AddUnitProps> = ({
       </div>
 
       {/* Submit */}
-      <div className="p-2 w-fit h-[2.5rem] rounded-lg flex items-center cursor-pointer bg-bt-tab-bg mt-auto ml-auto" onClick={() => setIsModalOpen(false)}>
-        <span>Create Unit</span>
+      <div
+        className="p-2 w-fit h-[2.5rem] rounded-lg flex items-center cursor-pointer bg-bt-tab-bg mt-auto ml-auto"
+        onClick={async () => {
+          try {
+            setIsLoading(true);
+            console.time("upload");
+            const url = await uploadFile(profileImage, "image");
+            const { data, error } = await supabase.from("units").insert([
+              {
+                imgUrl: "https://"+url,
+                name: unitName,
+                responsible: selectedResponsible,
+              },
+            ]);
+
+            setIsModalOpen(false);
+            setIsLoading(false);
+          } catch (e) {
+            console.log(e);
+          }
+        }}
+      >
+        <span>{isLoading ? "Loading..." : "Create Unit"}</span>
       </div>
     </Modal>
   );
