@@ -60,7 +60,6 @@ const AddResponsible: FunctionComponent<AddResponsibleProps> = ({
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<FormValues>();
   const onSubmit = async (data: FormValues) => {

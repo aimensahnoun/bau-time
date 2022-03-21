@@ -22,11 +22,17 @@ import { AiFillDelete } from "react-icons/ai";
 
 //utils import
 import supabase from "../../utils/supabase";
-import { uploadFile } from "../../utils/upload-file";
+import { uploadFile, avatarImage } from "../../utils/upload-file";
 
 //Recoil
 import { useRecoilValue } from "recoil";
 import { Employee, employeesState } from "../../recoil/state";
+
+//Form hook
+import { useForm } from "react-hook-form";
+
+//Id generator
+import uniqid from "uniqid";
 
 interface AddUnitProps {
   isModalOpen: boolean;
@@ -74,7 +80,58 @@ const AddUnit: FunctionComponent<AddUnitProps> = ({
       boss.name.toLowerCase().includes(selectedResponsible.toLowerCase())
     );
     setFilteredBosses(newList);
-  }, [selectedResponsible , bosses , employess]);
+  }, [selectedResponsible, bosses, employess]);
+
+  //Form Hook
+  type FormValues = {
+    unitName: string;
+  };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>();
+  const onSubmit = async (d: FormValues) => {
+    if (isLoading) return;
+    if (!selectedResponsible) return;
+    setIsLoading(true);
+    try {
+      const imageUrl = profileImage
+        ? await uploadFile(profileImage, "image")
+        : avatarImage;
+
+      const responsibleId = bosses.find(
+        (employee) => employee.name === selectedResponsible
+      )?.id;
+
+      const { data, error } = await supabase.from("units").insert({
+        id: uniqid(),
+        name: d.unitName,
+        responsible: selectedResponsible,
+        imgUrl: imageUrl,
+        responsibleId: responsibleId,
+      });
+
+      if (error) console.log(error);
+
+      if (!error) {
+        const result = await supabase
+          .from("workers")
+          .update({ office: d.unitName })
+          .match({ id: responsibleId });
+        
+      }
+
+      setProfileImage(null);
+      setSelectedResponsible("");
+      d.unitName = "";
+      setIsModalOpen(false);
+    } catch (error) {
+      console.log(error);
+    }
+    setIsLoading(false);
+  };
 
   return (
     <Modal isOpen={isModalOpen} setIsOpen={setIsModalOpen} title="Add Unit">
@@ -119,82 +176,65 @@ const AddUnit: FunctionComponent<AddUnitProps> = ({
           }}
         />
       </div>
-
-      {/* Title input */}
-      <span className="font-medium text-[1.1rem] mb-2">Unit Title:</span>
-      <input
-        onChange={(e) => setUnitName(e.target.value)}
-        type="text"
-        className="w-[90%] md:w-[50%] h-[2rem] bg-bt-form-bg rounded-lg border-[1px] border-bt-dark-gray p-2 outline-none focus:border-gray-300 mb-2"
-        placeholder="Dean Of Students Office"
-      />
-
-      {/* Unit responsible  */}
-      <div className="relative flex flex-col">
-        <span className="font-medium text-[1.1rem] mb-2">
-          Unit Responsible:
-        </span>
-        <input
-          onFocus={() => setIsResponsibleActive(true)}
-          onBlur={() => setIsResponsibleActive(false)}
-          value={selectedResponsible}
-          onChange={(e) => setSelectedResponsible(e.target.value)}
-          type="text"
-          className="w-[90%] md:w-[50%] h-[2rem] bg-bt-form-bg rounded-lg border-[1px] border-bt-dark-gray p-2 outline-none focus:border-gray-300 mb-2"
-          placeholder="John Doe"
-        />
-
-        <div
-          className={`bottom-0 left-0 w-[50%] h-[6rem] bg-bt-tab-bg rounded-lg p-2 overflow-scroll z-10 ${
-            isResponsibleActive ? "visible" : "invisible"
-          }`}
-        >
-          {filteredBosses.map((boss, index) => {
-            return (
-              <div
-                onMouseDown={(e) => e.preventDefault()}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setSelectedResponsible(boss.name);
-                  setIsResponsibleActive(false);
-                }}
-                key={boss.id}
-                className="w-[100%] hover:bg-gray-500 cursor-pointer"
-              >
-                <span>{boss.name}</span>
-              </div>
-            );
-          })}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        {/* Title input */}
+        <div className="flex flex-col">
+          <span className="font-medium text-[1.1rem] mb-2">Unit Title:</span>
+          <input
+            {...register("unitName", { required: true })}
+            type="text"
+            className="w-[90%] md:w-[50%] h-[2rem] bg-bt-form-bg rounded-lg border-[1px] border-bt-dark-gray p-2 outline-none focus:border-gray-300 mb-2"
+            placeholder="Dean Of Students Office"
+          />
         </div>
-      </div>
 
-      {/* Submit */}
-      <div
-        className="p-2 w-fit h-[2.5rem] rounded-lg flex items-center cursor-pointer bg-bt-tab-bg mt-auto ml-auto"
-        onClick={async () => {
-          try {
-            setIsLoading(true);
+        {/* Unit responsible  */}
+        <div className="relative flex flex-col">
+          <span className="font-medium text-[1.1rem] mb-2">
+            Unit Responsible:
+          </span>
+          <input
+            onFocus={() => setIsResponsibleActive(true)}
+            onBlur={() => setIsResponsibleActive(false)}
+            value={selectedResponsible}
+            onChange={(e) => setSelectedResponsible(e.target.value)}
+            type="text"
+            className="w-[90%] md:w-[50%] h-[2rem] bg-bt-form-bg rounded-lg border-[1px] border-bt-dark-gray p-2 outline-none focus:border-gray-300 mb-2"
+            placeholder="John Doe"
+          />
 
-            const url = profileImage
-              ? await uploadFile(profileImage, "image")
-              : "";
-            const { data, error } = await supabase.from("units").insert([
-              {
-                imgUrl: "https://" + url,
-                name: unitName,
-                responsible: selectedResponsible,
-              },
-            ]);
+          <div
+            className={`bottom-0 left-0 w-[50%] h-[6rem] bg-bt-tab-bg rounded-lg p-2 overflow-scroll z-10 ${
+              isResponsibleActive ? "visible" : "invisible"
+            }`}
+          >
+            {filteredBosses.map((boss, index) => {
+              return (
+                <div
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedResponsible(boss.name);
+                    setIsResponsibleActive(false);
+                  }}
+                  key={boss.id}
+                  className="w-[100%] hover:bg-gray-500 cursor-pointer"
+                >
+                  <span>{boss.name}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
 
-            setIsModalOpen(false);
-            setIsLoading(false);
-          } catch (e) {
-            console.log(e);
-          }
-        }}
-      >
-        <span>{isLoading ? "Loading..." : "Create Unit"}</span>
-      </div>
+        {/* Submit */}
+        <button
+          className="p-2 w-fit h-[2.5rem] rounded-lg flex items-center cursor-pointer bg-bt-tab-bg mt-auto ml-auto"
+          type="submit"
+        >
+          {isLoading ? "Loading..." : "Create Unit"}
+        </button>
+      </form>
     </Modal>
   );
 };
