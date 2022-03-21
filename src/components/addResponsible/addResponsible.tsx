@@ -119,7 +119,7 @@ const AddResponsible: FunctionComponent<AddResponsibleProps> = ({
         <div className="absolute -bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 flex gap-x-1.5 justify-center items-center">
           <div
             onClick={() => {
-              console.log(imageRef);
+              
               if (imageRef.current === null) return;
               imageRef.current.click();
             }}

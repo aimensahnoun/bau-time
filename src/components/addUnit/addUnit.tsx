@@ -1,5 +1,11 @@
 //React import
-import { FunctionComponent, useState, useEffect, useRef } from "react";
+import {
+  FunctionComponent,
+  useState,
+  useEffect,
+  useRef,
+  useLayoutEffect,
+} from "react";
 
 //NextJS import
 import Image from "next/image";
@@ -14,10 +20,13 @@ import Avatar from "../../../public/assets/avatar.png";
 import { HiUpload } from "react-icons/hi";
 import { AiFillDelete } from "react-icons/ai";
 
-//supabase import
+//utils import
 import supabase from "../../utils/supabase";
-
 import { uploadFile } from "../../utils/upload-file";
+
+//Recoil
+import { useRecoilValue } from "recoil";
+import { Employee, employeesState } from "../../recoil/state";
 
 interface AddUnitProps {
   isModalOpen: boolean;
@@ -28,23 +37,32 @@ const AddUnit: FunctionComponent<AddUnitProps> = ({
   isModalOpen,
   setIsModalOpen,
 }) => {
-  const bosses = ["Mehmet Yiğit Tay", "Aylin Can", "Hamdi Bey", "Yiğit Şimşek"];
+  //Recoil state
+  const employess = useRecoilValue(employeesState);
 
+  //UseStates
+  const [bosses, setBosses] = useState<Employee[]>([]);
   // Checking if responsible input is active
   const [isResponsibleActive, setIsResponsibleActive] = useState(false);
-
   const [filteredBosses, setFilteredBosses] = useState(bosses);
-
   // Storing selected responsible name
   const [selectedResponsible, setSelectedResponsible] = useState("");
-
   const [profileImage, setProfileImage] = useState<File | null>(null);
-
   const imageRef = useRef<HTMLInputElement | null>(null);
-
   const [unitName, setUnitName] = useState("");
-
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const list = employess.filter(
+      (employee) =>
+        (employee.type === "fullTime" && employee.office === null) ||
+        employee.office === "" ||
+        employee.office === "\n" ||
+        employee.office === undefined
+    );
+    console.log(list);
+    setBosses(list);
+  }, [employess]);
 
   // Filtering responsible list based on input
   useEffect(() => {
@@ -53,10 +71,10 @@ const AddUnit: FunctionComponent<AddUnitProps> = ({
     }
 
     const newList = bosses.filter((boss) =>
-      boss.toLowerCase().includes(selectedResponsible.toLowerCase())
+      boss.name.toLowerCase().includes(selectedResponsible.toLowerCase())
     );
     setFilteredBosses(newList);
-  }, [selectedResponsible]);
+  }, [selectedResponsible , bosses , employess]);
 
   return (
     <Modal isOpen={isModalOpen} setIsOpen={setIsModalOpen} title="Add Unit">
@@ -72,7 +90,6 @@ const AddUnit: FunctionComponent<AddUnitProps> = ({
         <div className="absolute -bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 flex gap-x-1.5 justify-center items-center">
           <div
             onClick={() => {
-              console.log(imageRef);
               if (imageRef.current === null) return;
               imageRef.current.click();
             }}
@@ -138,13 +155,13 @@ const AddUnit: FunctionComponent<AddUnitProps> = ({
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={(e) => {
                   e.stopPropagation();
-                  setSelectedResponsible(boss);
+                  setSelectedResponsible(boss.name);
                   setIsResponsibleActive(false);
                 }}
-                key={boss}
+                key={boss.id}
                 className="w-[100%] hover:bg-gray-500 cursor-pointer"
               >
-                <span>{boss}</span>
+                <span>{boss.name}</span>
               </div>
             );
           })}
@@ -157,11 +174,13 @@ const AddUnit: FunctionComponent<AddUnitProps> = ({
         onClick={async () => {
           try {
             setIsLoading(true);
-            console.time("upload");
-            const url = await uploadFile(profileImage, "image");
+
+            const url = profileImage
+              ? await uploadFile(profileImage, "image")
+              : "";
             const { data, error } = await supabase.from("units").insert([
               {
-                imgUrl: "https://"+url,
+                imgUrl: "https://" + url,
                 name: unitName,
                 responsible: selectedResponsible,
               },

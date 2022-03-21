@@ -2,7 +2,7 @@
 import { atom } from "recoil";
 
 //Models
-interface Employee {
+export interface Employee {
   id: string;
   name: string;
   type: string;

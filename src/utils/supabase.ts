@@ -15,19 +15,24 @@ const supabase = createClient(
   options
 );
 
-export const listenToData = async (props) => {
-  console.log("listenToData");
+export const fetchInitialData = async (props) => {
+  const { setEmployees } = props;
 
+  const { data, error } = await supabase.from("workers").select();
+  if (!error) setEmployees(data);
+};
+
+export const listenToData = async (props) => {
   const { setEmployees } = props;
 
   supabase
     .from("workers")
     .on("*", async (payload) => {
       const { data, error } = await supabase.from("workers").select();
-      console.log(error)
+      console.log(error);
       if (error) return;
       if (!data) return;
-      console.log("Data gotten ",data);
+
       setEmployees(data);
     })
     .subscribe();

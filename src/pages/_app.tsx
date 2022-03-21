@@ -9,16 +9,15 @@ import { useState, useLayoutEffect } from "react";
 
 //Recoil import
 import { RecoilRoot, useRecoilState } from "recoil";
-import {employeesState} from "../recoil/state";
+import { employeesState } from "../recoil/state";
 
 //Supabase import
-import supabase, { listenToData } from "../utils/supabase";
+import supabase, { listenToData, fetchInitialData } from "../utils/supabase";
 
 //Loader import
 import { ClipLoader } from "react-spinners";
 
 function MyApp({ Component, pageProps }: AppProps) {
-
   //UseState
   const [isLoading, setIsLoading] = useState(true);
 
@@ -35,10 +34,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       router.replace("/");
     }
 
-    console.log("Running the first time");
-
+    fetchInitialData({ setEmployees });
     listenToData({ setEmployees });
-    console.log("Finished with data");
+
     setIsLoading(false);
   }, []);
 
