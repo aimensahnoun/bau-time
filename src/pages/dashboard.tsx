@@ -31,8 +31,15 @@ import supabase from "../utils/supabase";
 //Dependencies import
 import ClipLoader from "react-spinners/ClipLoader";
 
+//Recoil import
+import { useRecoilValue } from "recoil";
+import { unitsState } from "../recoil/state";
+
 const Dashboard: NextPage = () => {
   const router = useRouter();
+
+  //Recoil state
+  const units = useRecoilValue(unitsState);
 
   //Initial loading state
   const [isLoading, setIsLoading] = useState(true);
@@ -127,7 +134,7 @@ const Dashboard: NextPage = () => {
             <span className="font-semibold lg:text-[1.1rem] 2xl:text-[1.2rem]">
               Created Unit Count
             </span>
-            <span className="font-semibold text-[1.2rem]">0</span>
+            <span className="font-semibold text-[1.2rem]">{units.length}</span>
           </div>
           <div className="w-full h-full flex items-center  flex-col gap-y-4 justify-center lg:-translate-y-5 2xl:-translate-y-10">
             {tabs.map((tab, index) => {
@@ -149,7 +156,7 @@ const Dashboard: NextPage = () => {
               title="Logout"
               isActive={false}
               onClick={() => {
-                supabase.auth.signOut()
+                supabase.auth.signOut();
                 router.push("/");
               }}
               className=""
