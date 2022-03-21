@@ -10,7 +10,7 @@ interface Employee {
   office: string | null;
 }
 
-export const employeesState = atom<Employee | null>({
+export const employeesState = atom<Employee[]>({
   key: "employeesState",
-  default: null,
+  default: [],
 });

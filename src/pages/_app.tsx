@@ -35,7 +35,10 @@ function MyApp({ Component, pageProps }: AppProps) {
       router.replace("/auth");
     }
 
+    console.log("Running the first time");
+
     listenToData({ setEmployees });
+    console.log("Finished with data");
     setIsLoading(false);
   }, []);
 
@@ -56,4 +59,4 @@ function MyAppWrapper({ Component, pageProps, router }: AppProps) {
   );
 }
 
-export default MyApp;
+export default MyAppWrapper;

@@ -21,7 +21,6 @@ import { useForm } from "react-hook-form";
 import { uploadFile, avatarImage } from "../../utils/upload-file";
 import supabase from "../../utils/supabase";
 
-
 interface AddResponsibleProps {
   isModalOpen: boolean;
   setIsModalOpen: (isModalOpen: boolean) => void;
@@ -40,6 +39,7 @@ const AddResponsible: FunctionComponent<AddResponsibleProps> = ({
   // Storing selected responsible name
   const [selectedResponsible, setSelectedResponsible] = useState("");
   const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   //Use Ref
   const imageRef = useRef<HTMLInputElement | null>(null);
@@ -64,6 +64,8 @@ const AddResponsible: FunctionComponent<AddResponsibleProps> = ({
     formState: { errors },
   } = useForm<FormValues>();
   const onSubmit = async (data: FormValues) => {
+    if (isLoading) return;
+    setIsLoading(true);
     try {
       const imageUrl = profileImage
         ? await uploadFile(profileImage, "image")
@@ -79,19 +81,18 @@ const AddResponsible: FunctionComponent<AddResponsibleProps> = ({
       });
 
       const response = await result.json();
-
-      console.log(response.user.id);
       await supabase.from("workers").insert({
-        name : data.name,
-        type : "fullTime",
-        imgUrl : imageUrl,
-        id : response.user.id,
-      })
+        name: data.name,
+        type: "fullTime",
+        imgUrl: imageUrl,
+        id: response.user.id,
+      });
 
-
+      setIsModalOpen(false)
     } catch (error) {
       console.log(error);
     }
+    setIsLoading(false);
   };
 
   type FormValues = {
@@ -203,7 +204,7 @@ const AddResponsible: FunctionComponent<AddResponsibleProps> = ({
           className="p-2 w-fit h-[2.5rem] rounded-lg flex items-center cursor-pointer bg-bt-tab-bg mt-auto ml-auto"
           type="submit"
         >
-          Add Responsible
+          {isLoading ? "Sumbitting..." : "Add Responsible"}
         </button>
       </form>
     </Modal>
