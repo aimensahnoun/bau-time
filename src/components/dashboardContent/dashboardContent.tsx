@@ -10,8 +10,14 @@ import Unit from "../unit/unit";
 //Utils import
 import { dashboardTabsVariants } from "../../utils/page-transition";
 
+//Recoil content
+import {useRecoilValue} from "recoil"
+import { userState } from "../../recoil/state";
 
 const DashboardContent: FunctionComponent = () => {
+  //Recoil state
+  const user = useRecoilValue(userState);
+
   return (
     <AnimatePresence exitBeforeEnter>
       <motion.div
@@ -24,7 +30,7 @@ const DashboardContent: FunctionComponent = () => {
       >
         <div className="flex flex-col gap-y-[1.5rem]">
           <span className="font-bold text-[1.5rem] ">
-            Welcome Back, Aimen 😊
+            Welcome Back, {user?.name.split(" ")[0]} 😊
           </span>
           <div className="flex min-w-[17rem] overflow-x-scroll items-center scroll h-[20rem] gap-x-3 no-scrollbar">
             <Unit

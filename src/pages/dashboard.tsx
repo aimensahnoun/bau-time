@@ -33,13 +33,14 @@ import ClipLoader from "react-spinners/ClipLoader";
 
 //Recoil import
 import { useRecoilValue } from "recoil";
-import { unitsState } from "../recoil/state";
+import { unitsState, userState } from "../recoil/state";
 
 const Dashboard: NextPage = () => {
   const router = useRouter();
 
   //Recoil state
   const units = useRecoilValue(unitsState);
+  const user = useRecoilValue(userState);
 
   //Initial loading state
   const [isLoading, setIsLoading] = useState(true);
@@ -130,14 +131,19 @@ const Dashboard: NextPage = () => {
         <div
           className={` lg:w-[15rem] 2xl:w-[20rem] flex flex-col items-center bg-bt-accent-bg  justify-between ${styles.sidebar} `}
         >
-          <div className="w-[70%] h-[6rem] bg-bt-tab-bg lg:translate-y-5 2xl:translate-y-20 rounded-lg flex flex-col justify-center items-center">
-            <span className="font-semibold lg:text-[1.1rem] 2xl:text-[1.2rem]">
-              Created Unit Count
-            </span>
-            <span className="font-semibold text-[1.2rem]">{units.length}</span>
-          </div>
+          {user?.type === "Admin" && (
+            <div className="w-[70%] h-[6rem] bg-bt-tab-bg lg:translate-y-5 2xl:translate-y-20 rounded-lg flex flex-col justify-center items-center">
+              <span className="font-semibold lg:text-[1.1rem] 2xl:text-[1.2rem]">
+                Created Unit Count
+              </span>
+              <span className="font-semibold text-[1.2rem]">
+                {units.length}
+              </span>
+            </div>
+          )}
           <div className="w-full h-full flex items-center  flex-col gap-y-4 justify-center lg:-translate-y-5 2xl:-translate-y-10">
             {tabs.map((tab, index) => {
+              if (index === 1 && user?.type !== "Admin") return null;
               return (
                 <DashTab
                   title={tab.title}

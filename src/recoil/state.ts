@@ -27,3 +27,8 @@ export const unitsState = atom<Unit[]>({
   key: "unitsState",
   default: [],
 });
+
+export const userState = atom<Employee | null>({
+  key: "userState",
+  default: null,
+})
