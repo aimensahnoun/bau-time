@@ -7,11 +7,53 @@ import { FunctionComponent, useState } from "react";
 //Component import
 import ActionButton from "../actionButton/actionButton";
 
+//Form import
+import { useForm } from "react-hook-form";
+
+//supabase import
+import supabase from "../../utils/supabase";
+
 const SignInForm: FunctionComponent<{}> = () => {
+  //UseState
+
+  const [isLoading, setIsLoading] = useState(false);
+
   const [userName, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const router = useRouter();
+
+  //Form Hook
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>();
+  const onSubmit = async (data: FormValues) => {
+    if (isLoading) return;
+    setIsLoading(true);
+    try {
+      const res = await supabase.auth.signIn({
+        email: data.email,
+        password: data.password,
+      });
+      if (res.error) {
+        setIsLoading(false);
+        console.log(res.error);
+        return;
+      }
+      router.replace("/dashboard");
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+    setIsLoading(false);
+  };
+
+  type FormValues = {
+    email: string;
+    password: string;
+  };
 
   //Login handler
   const handleLogin = (): void => {
@@ -30,26 +72,36 @@ const SignInForm: FunctionComponent<{}> = () => {
       }}
     >
       <span className="font-bold text-[2rem] mb-8">Login</span>
-      <input
-        className=" w-[90%] md:w-[23rem] h-[2rem] bg-bt-form-bg rounded-lg border-[1px] border-bt-dark-gray p-2 outline-none focus:border-gray-300 mb-4"
-        placeholder="username"
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-        className=" w-[90%]  md:w-[23rem] h-[2rem] bg-bt-form-bg rounded-lg border-[1px] border-bt-dark-gray p-2 outline-none focus:border-gray-300 mb-2"
-        placeholder="Password"
-        type="password"
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <span className="mb-5 md:mb-8 md:self-end md:mr-[8rem] hover:cursor-pointer">
-        Forgot Password?
-      </span>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col items-center"
+      >
+        <input
+          className=" w-[90%] md:w-[23rem] h-[2rem] bg-bt-form-bg rounded-lg border-[1px] border-bt-dark-gray p-2 outline-none focus:border-gray-300 mb-4"
+          placeholder="name.surname@bau.edu.tr"
+          {...register("email", { required: true })}
+          type="email"
+        />
+        {errors.email && <span className="text-red-600">This field is required</span>}
+        <input
+          className=" w-[90%]  md:w-[23rem] h-[2rem] bg-bt-form-bg rounded-lg border-[1px] border-bt-dark-gray p-2 outline-none focus:border-gray-300 mb-2"
+          placeholder="Password"
+          type="password"
+          {...register("password", {
+            required: { value: true, message: "This field is required" },
+            minLength: {
+              value: 6,
+              message: "Password must be at least 6 characters",
+            },
+          })}
+        />
+        {errors.password && <span className="text-red-600">{errors.password.message}</span>}
+        <span className="mb-5 md:mb-8 md:self-end md:mr-[8rem] hover:cursor-pointer">
+          Forgot Password?
+        </span>
 
-      <ActionButton
-        text="Sign In"
-        className="mb-2 md:mb-0"
-        onClick={handleLogin}
-      />
+        <button className="bg-bt-form-bg w-fit p-2 rounded-lg h-[2rem] flex items-center justify-center">{isLoading ? "Loading..." : "Login"}</button>
+      </form>
 
       {/* <span className="mt-auto select-none" onClick={() => setIsSignIn(false)}>
         {AuthLocalized.newUser?.[currentLanguage]}

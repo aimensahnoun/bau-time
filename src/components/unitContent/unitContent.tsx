@@ -58,7 +58,7 @@ const UnitContent: FunctionComponent = () => {
               <span className="font-bold text-[1.5rem] ">Units</span>
               <input
                 placeholder="Search for unit"
-                className="w-[20rem] h-[3rem] bg-bt-dark-gray rounded-lg p-2"
+                className="w-[20rem] h-[3rem] bg-bt-dark-gray rounded-lg p-2 outline-none"
                 onChange={(e) => setSearchValue(e.target.value)}
               />
             </div>

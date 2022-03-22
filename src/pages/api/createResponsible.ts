@@ -18,12 +18,11 @@ const supabase = createClient(
   options
 );
 
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { name, email, password  } = req.body;
+  const { name, email, password } = req.body;
 
   if (!name || !email || !password) {
     return res.status(400).json({
@@ -34,8 +33,10 @@ export default async function handler(
   const { data: user, error } = await supabase.auth.api.createUser({
     email,
     password,
-    data: { name },
+    data: { name, confirmed_at: new Date() },
   });
+
+  supabase.auth.api.sendMagicLinkEmail(email)
 
   if (error) {
     return res.status(500).json({ error: error.message });
