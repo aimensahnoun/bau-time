@@ -31,4 +31,19 @@ export const unitsState = atom<Unit[]>({
 export const userState = atom<Employee | null>({
   key: "userState",
   default: null,
+});
+
+export const currentTabState = atom<number>({
+  key: "currentTabState",
+  default: 0,
+});
+
+export const previousTabState = atom<number>({
+  key: "previousTabState",
+  default: 0,
+});
+
+export const selectedUnitState = atom<Unit | null>({
+  key: "selectedUnitState",
+  default: null,
 })

@@ -14,6 +14,7 @@ import DashboardContent from "../components/dashboardContent/dashboardContent";
 import UnitContent from "../components/unitContent/unitContent";
 import EmployeesContent from "../components/employeesContent/employeesContent";
 import SettingsContent from "../components/settingsContent/settingsContent";
+import UnitDetails from "../components/unitDetails/unitDetails";
 
 //Icons import
 import { MdOutlineSpaceDashboard } from "react-icons/md";
@@ -32,8 +33,8 @@ import supabase from "../utils/supabase";
 import ClipLoader from "react-spinners/ClipLoader";
 
 //Recoil import
-import { useRecoilValue } from "recoil";
-import { unitsState, userState } from "../recoil/state";
+import { useRecoilValue, useRecoilState } from "recoil";
+import { unitsState, userState, currentTabState } from "../recoil/state";
 
 const Dashboard: NextPage = () => {
   const router = useRouter();
@@ -41,7 +42,7 @@ const Dashboard: NextPage = () => {
   //Recoil state
   const units = useRecoilValue(unitsState);
   const user = useRecoilValue(userState);
-
+  const [currentTab, setCurrentTab] = useRecoilState(currentTabState);
   //Initial loading state
   const [isLoading, setIsLoading] = useState(true);
 
@@ -51,9 +52,6 @@ const Dashboard: NextPage = () => {
     if (!user) router.push("/");
     else setIsLoading(false);
   }, []);
-
-  //Current tab index
-  const [currentTab, setCurrentTab] = useState(0);
 
   //Tabs array
   const tabs = [
@@ -86,6 +84,8 @@ const Dashboard: NextPage = () => {
         return <EmployeesContent />;
       case 3:
         return <SettingsContent />;
+      case 4:
+        return <UnitDetails />;
       default:
         return <DashboardContent />;
     }

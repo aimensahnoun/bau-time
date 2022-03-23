@@ -14,11 +14,13 @@ import CustomImage from "../customImage/customImage";
 
 interface UnitComponentProps {
   unit: Unit;
+  onClick : () => void;
 }
 
-const UnitComponent: FunctionComponent<UnitComponentProps> = ({ unit }) => {
+const UnitComponent: FunctionComponent<UnitComponentProps> = ({ unit , onClick}) => {
   return (
     <div
+    onClick={onClick}
       className={`h-[12rem] bg-bt-dark-gray rounded-xl flex flex-col items-center justify-between py-3 transition-all cursor-pointer duration-300 select-none w-[11rem]
 `}
     >
