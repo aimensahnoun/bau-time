@@ -61,7 +61,7 @@ const AddUnit: FunctionComponent<AddUnitProps> = ({
   useEffect(() => {
     const list = employess.filter(
       (employee) =>
-        (employee.type === "fullTime" && employee.office === null) ||
+        (employee.type === "Responsible" && employee.office === null) ||
         employee.office === "" ||
         employee.office === "\n" ||
         employee.office === undefined

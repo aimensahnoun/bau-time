@@ -18,6 +18,7 @@ import { dashboardTabsVariants } from "../../utils/page-transition";
 
 //Component import
 import AddResponsible from "../addResponsible/addResponsible";
+import EmployeeItem from "../employee/employee";
 
 //Recoil import
 import { useRecoilState } from "recoil";
@@ -25,7 +26,6 @@ import { employeesState } from "../../recoil/state";
 
 //supabase import
 import supabase from "../../utils/supabase";
-import CustomImage from "../customImage/customImage";
 
 const EmployeesContent: FunctionComponent = () => {
   //Recoil State
@@ -96,35 +96,7 @@ const EmployeesContent: FunctionComponent = () => {
         <div className="w-full grid grid-gap-3 2xl:grid-cols-10 mt-6">
           {employessList.map((employee) => {
             return (
-              <div
-                key={employee.id}
-                className={`h-[12rem] bg-bt-dark-gray rounded-xl flex flex-col items-center py-3 transition-all cursor-pointer duration-300 select-none w-[11rem]
-`}
-              >
-                {/* Employee image */}
-                <div className="w-[3rem] h-[3rem] bg-white rounded-full  -translate-y-[1.7rem] ">
-                  <CustomImage
-                    src={employee.imgUrl}
-                    alt="employee image"
-                    height="100%"
-                    layout="fill"
-                    width="100%"
-                    className="rounded-full"
-                  />
-                </div>
-                {/* employee name */}
-                <span
-                  className={`font-bold transition-all unit-title duration-500  text-ellipsis whitespace-nowrap overflow-hiddens`}
-                >
-                  {employee.name}
-                </span>
-
-                <span
-                  className={`font-medium text-[.8rem] transition-all unit-title duration-500  text-ellipsis whitespace-nowrap overflow-hiddens`}
-                >
-                  {employee.type}
-                </span>
-              </div>
+            <EmployeeItem key={employee.id} employee={employee} />
             );
           })}
         </div>
