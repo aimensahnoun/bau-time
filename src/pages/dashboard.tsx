@@ -77,7 +77,7 @@ const Dashboard: NextPage = () => {
   const rendedBody = (): ReactElement => {
     switch (currentTab) {
       case 0:
-        return <DashboardContent />;
+        return user?.type === "Admin" ? <DashboardContent /> : <UnitDetails />;
       case 1:
         return <UnitContent />;
       case 2:
@@ -143,7 +143,8 @@ const Dashboard: NextPage = () => {
           )}
           <div className="w-full h-full flex items-center  flex-col gap-y-4 justify-center lg:-translate-y-5 2xl:-translate-y-10">
             {tabs.map((tab, index) => {
-              if (index === 1 && user?.type !== "Admin") return null;
+              if ((index === 1 || index === 2) && user?.type !== "Admin")
+                return null;
               return (
                 <DashTab
                   title={tab.title}

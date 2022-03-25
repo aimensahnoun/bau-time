@@ -21,6 +21,9 @@ import AddUnit from "../addUnit/addUnit";
 import UnitComponent from "../unitComponent/unitComponent";
 import EmployeesContent from "../employeesContent/employeesContent";
 
+//Utils import
+import supabase from "../../utils/supabase";
+
 //recoil import
 import { useRecoilValue, useRecoilState } from "recoil";
 import {
@@ -33,6 +36,7 @@ import {
   userState,
 } from "../../recoil/state";
 import EmployeeItem from "../employee/employee";
+import TimeSheet from "../timeSheet/timeSheet";
 
 const UnitDetails: FunctionComponent = () => {
   //Recoil state
@@ -53,7 +57,7 @@ const UnitDetails: FunctionComponent = () => {
   useLayoutEffect(() => {
     setUnit(
       units.filter((un) => {
-        return un.id === selectedUnit?.id;
+        return un.id === selectedUnit?.id || un?.responsibleId === user?.id;
       })[0]
     );
   }, [units]);
@@ -109,15 +113,17 @@ const UnitDetails: FunctionComponent = () => {
               <span className="font-bold text-[1.5rem] ">{unit?.name}</span>
             </div>
 
-            {user?.type=="Responsible" &&
+            {user?.type == "Responsible" && (
               <div
                 className="p-2 min-w-[5rem] h-[2.5rem] rounded-lg flex items-center cursor-pointer bg-bt-tab-bg outline-none "
                 onClick={() => setIsModalOpen(true)}
               >
                 <BiPlus className="text-white text-[1.1rem]" />
-                <span>Add Assistant</span>
+                <span>
+                  {detailsTab === 2 ? "Create TimeSheet" : "Add Assistant"}
+                </span>
               </div>
-            }
+            )}
           </div>
 
           <div className="flex gap-x-4 justify-start w-full -mt-[1rem] items-center ">
@@ -155,7 +161,7 @@ const UnitDetails: FunctionComponent = () => {
                 className="w-full h-[70vh]"
                 src="https://bafybeiawdqnvo3rq6pm37ups2ar474us3knboycfw2svdqrcaqwdso22mm.ipfs.dweb.link/BAU%20ISO%20Schedule%20-%20Sheet%20%281%29.pdf"
               ></iframe>
-            ) : (
+            ) : detailsTab === 1 ? (
               <div className="flex flex-col gap-y-2 -mt-4">
                 <input
                   placeholder="Search for employee"
@@ -169,6 +175,11 @@ const UnitDetails: FunctionComponent = () => {
                     );
                   })}
                 </div>
+              </div>
+            ) : (
+              <div className="w-full">
+                <TimeSheet />
+                <TimeSheet />
               </div>
             )}
           </div>
