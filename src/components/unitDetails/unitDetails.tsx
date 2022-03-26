@@ -48,7 +48,13 @@ const UnitDetails: FunctionComponent = () => {
 
   //Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [employeeList, setEmplyeeList] = useState(employees);
+  const [employeeList, setEmplyeeList] = useState(
+    employees.filter(
+      (employee) =>
+        (employee.office === unit?.name || employee.office === unit?.id) &&
+        employee.type === "Assistant"
+    )
+  );
   const [searchValue, setSearchValue] = useState("");
   const [unit, setUnit] = useState<Unit | null>(null);
   const [detailsTab, setDetailTab] = useState(0);
@@ -89,7 +95,7 @@ const UnitDetails: FunctionComponent = () => {
       );
     });
     setEmplyeeList(filteredEmployees);
-  }, [employees, searchValue]);
+  }, [employees, searchValue , unit]);
 
   return (
     <AnimatePresence exitBeforeEnter>
