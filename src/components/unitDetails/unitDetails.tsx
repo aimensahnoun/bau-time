@@ -12,14 +12,14 @@ import { dashboardTabsVariants } from "../../utils/page-transition";
 
 //Icons import
 import { BiPlus } from "react-icons/bi";
-import { FiUsers } from "react-icons/fi";
-import { AiOutlineHourglass } from "react-icons/ai";
 import { IoIosArrowBack } from "react-icons/io";
 
 //Component import
 import AddUnit from "../addUnit/addUnit";
-import UnitComponent from "../unitComponent/unitComponent";
-import EmployeesContent from "../employeesContent/employeesContent";
+import EmployeeItem from "../employee/employee";
+import TimeSheet from "../timeSheet/timeSheet";
+import ScheduleComponent from "../scheduleComponent/scheduleComponent";
+import AddSchedule from "../addScheduleModal/addScheduleModal";
 
 //Utils import
 import supabase from "../../utils/supabase";
@@ -35,8 +35,6 @@ import {
   unitsState,
   userState,
 } from "../../recoil/state";
-import EmployeeItem from "../employee/employee";
-import TimeSheet from "../timeSheet/timeSheet";
 
 const UnitDetails: FunctionComponent = () => {
   //Recoil state
@@ -87,7 +85,13 @@ const UnitDetails: FunctionComponent = () => {
 
   return (
     <AnimatePresence exitBeforeEnter>
-      <AddUnit isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+
+      <AddSchedule
+        isModalOpen={isModalOpen && detailsTab === 0}
+        setIsModalOpen={setIsModalOpen}
+        unitId={unit?.id}
+      />
+
       <motion.div
         variants={dashboardTabsVariants}
         initial="hidden"
@@ -120,7 +124,11 @@ const UnitDetails: FunctionComponent = () => {
               >
                 <BiPlus className="text-white text-[1.1rem]" />
                 <span>
-                  {detailsTab === 2 ? "Create TimeSheet" : "Add Assistant"}
+                  {detailsTab === 0
+                    ? "Add Schedule"
+                    : detailsTab === 2
+                    ? "Create TimeSheet"
+                    : "Add Assistant"}
                 </span>
               </div>
             )}
@@ -156,11 +164,7 @@ const UnitDetails: FunctionComponent = () => {
           {/* Body */}
           <div className="h-full">
             {detailsTab === 0 ? (
-              <iframe
-                id="iframepdf"
-                className="w-full h-[70vh]"
-                src="https://bafybeiawdqnvo3rq6pm37ups2ar474us3knboycfw2svdqrcaqwdso22mm.ipfs.dweb.link/BAU%20ISO%20Schedule%20-%20Sheet%20%281%29.pdf"
-              ></iframe>
+              <ScheduleComponent schedule={unit?.schedule} />
             ) : detailsTab === 1 ? (
               <div className="flex flex-col gap-y-2 -mt-4">
                 <input

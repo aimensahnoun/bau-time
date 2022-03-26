@@ -16,6 +16,7 @@ export interface Unit {
   responsible: string;
   imgUrl: string;
   responsibleId: string;
+  schedule : string | null;
 }
 
 export const employeesState = atom<Employee[]>({
