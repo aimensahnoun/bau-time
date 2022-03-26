@@ -77,15 +77,15 @@ const UnitDetails: FunctionComponent = () => {
       return setEmplyeeList(
         employees.filter(
           (employee) =>
-            (employee.office === unit?.name || employee.office === unit?.id) && employee.type === "Assistant"
+            (employee.office === unit?.name || employee.office === unit?.id) &&
+            employee.type === "Assistant"
         )
       );
     const filteredEmployees = employees.filter((employee) => {
       return (
-        ((employee.office === unit?.name || employee.office === unit?.id) &&
-          employee.name.toLowerCase().includes(searchValue.toLowerCase())) ||
-        employee.office?.toLowerCase().includes(searchValue.toLowerCase()) ||
-        employee.type.toLowerCase().includes(searchValue.toLowerCase())
+        (employee.office === unit?.name || employee.office === unit?.id) &&
+        employee.type === "Assistant" &&
+        employee.name.toLowerCase().includes(searchValue.toLowerCase())
       );
     });
     setEmplyeeList(filteredEmployees);
