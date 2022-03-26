@@ -20,6 +20,7 @@ import EmployeeItem from "../employee/employee";
 import TimeSheet from "../timeSheet/timeSheet";
 import ScheduleComponent from "../scheduleComponent/scheduleComponent";
 import AddSchedule from "../addScheduleModal/addScheduleModal";
+import AddAssitant from "../addAssitant/addAssitant";
 
 //Utils import
 import supabase from "../../utils/supabase";
@@ -88,6 +89,11 @@ const UnitDetails: FunctionComponent = () => {
 
       <AddSchedule
         isModalOpen={isModalOpen && detailsTab === 0}
+        setIsModalOpen={setIsModalOpen}
+        unitId={unit?.id}
+      />
+      <AddAssitant
+        isModalOpen={isModalOpen && detailsTab === 1}
         setIsModalOpen={setIsModalOpen}
         unitId={unit?.id}
       />
