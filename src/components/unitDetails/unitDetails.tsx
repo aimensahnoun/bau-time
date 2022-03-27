@@ -217,7 +217,7 @@ const UnitDetails: FunctionComponent = () => {
               </div>
             ) : (
               <div className="w-full flex flex-col gap-y-2">
-                {unitTimesheets.map((timesheet) => {
+                {unitTimesheets.sort((a,b) => new Date(b.month) - new Date(a.month)).map((timesheet) => {
                   return <TimeSheet key={timesheet.id} timesheet={timesheet} />;
                 })}
               </div>

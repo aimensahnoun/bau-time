@@ -24,6 +24,7 @@ export interface Timesheet {
   unitId: string;
   timesheet: {};
   month: string;
+  submitted: boolean;
 }
 
 export const employeesState = atom<Employee[]>({
