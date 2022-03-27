@@ -107,7 +107,17 @@ const TimeSheet: FunctionComponent<TimeSheetProps> = ({
                 </button>
               )}
               {!isEditing && !timesheet.submitted && (
-                <button className="h-[2rem] bg-bt-dark-gray rounded-lg p-2 flex items-center justify-center">
+                <button
+                  className="h-[2rem] bg-bt-dark-gray rounded-lg p-2 flex items-center justify-center"
+                  onClick={async () => {
+                    const { data, error } = await supabase
+                      .from("timesheets")
+                      .update({ submitted: true })
+                      .match({ month: timesheet.month });
+
+                    if (error) console.log(error);
+                  }}
+                >
                   {" "}
                   Submit
                 </button>
@@ -123,20 +133,18 @@ const TimeSheet: FunctionComponent<TimeSheetProps> = ({
                       size: 16,
                       bold: true,
                     };
-                  sheet.addRow(["Unit : " + unitName]).font =
-                  {
+                  sheet.addRow(["Unit : " + unitName]).font = {
                     size: 16,
                     bold: true,
-                  };;
+                  };
                   sheet.addRow([
                     "Assistant",
                     ...timesheet.timesheet?.days,
                     "Total",
-                  ]).font =
-                  {
+                  ]).font = {
                     size: 16,
                     bold: true,
-                  };;
+                  };
                   timeSheetData.forEach((data) => {
                     sheet.addRow([
                       data.assistant,

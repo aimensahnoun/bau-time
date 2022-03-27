@@ -133,9 +133,9 @@ const UnitDetails: FunctionComponent = () => {
         animate="enter"
         exit="exit"
         transition={{ type: "linear" }}
-        className={`dash-body p-10`}
+        className={`dash-body p-10 overflow-y-scroll pb-[10rem]`}
       >
-        <div className="flex flex-col gap-y-[2rem]">
+        <div className="flex flex-col gap-y-[2rem] ">
           {/* Title bar */}
           <div className="flex justify-between items-center">
             <div className="flex gap-x-10 items-center">
@@ -220,6 +220,7 @@ const UnitDetails: FunctionComponent = () => {
                 {unitTimesheets
                   .sort((a, b) => new Date(b.month) - new Date(a.month))
                   .map((timesheet) => {
+                    if(user?.type === "Admin" && !timesheet.submitted) return null
                     return (
                       <TimeSheet
                         key={timesheet.id}
