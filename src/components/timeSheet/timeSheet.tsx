@@ -9,16 +9,22 @@ import { timeSheetAnimation } from "../../utils/page-transition";
 //FramerMotion import
 import { motion, AnimatePresence } from "framer-motion";
 import { Timesheet } from "../../recoil/state";
-import { timeStamp } from "console";
 
 //Supabase import
 import supabase from "../../utils/supabase";
 
+import ExcelJS from "exceljs";
+import { saveAs } from "file-saver";
+
 interface TimeSheetProps {
   timesheet: Timesheet;
+  unitName: string;
 }
 
-const TimeSheet: FunctionComponent<TimeSheetProps> = ({ timesheet }) => {
+const TimeSheet: FunctionComponent<TimeSheetProps> = ({
+  timesheet,
+  unitName,
+}) => {
   //Use State
   const [isOpen, setIsOpen] = useState(false);
   const [timeSheetData, setTimeSheetData] = useState([]);
@@ -106,6 +112,59 @@ const TimeSheet: FunctionComponent<TimeSheetProps> = ({ timesheet }) => {
                   Submit
                 </button>
               )}
+              <button
+                className="h-[2rem] bg-bt-dark-gray rounded-lg p-2 flex items-center justify-center"
+                onClick={async () => {
+                  const workbook = new ExcelJS.Workbook();
+                  const sheet = workbook.addWorksheet("Timesheet");
+
+                  sheet.addRow(["Month : " + parseDate(timesheet.month)]).font =
+                    {
+                      size: 16,
+                      bold: true,
+                    };
+                  sheet.addRow(["Unit : " + unitName]).font =
+                  {
+                    size: 16,
+                    bold: true,
+                  };;
+                  sheet.addRow([
+                    "Assistant",
+                    ...timesheet.timesheet?.days,
+                    "Total",
+                  ]).font =
+                  {
+                    size: 16,
+                    bold: true,
+                  };;
+                  timeSheetData.forEach((data) => {
+                    sheet.addRow([
+                      data.assistant,
+                      ...data.hours,
+                      data.hours.reduce((a, b) => a + b, 0),
+                    ]).border = {
+                      top: { style: "double", color: { argb: "000" } },
+                      left: { style: "double", color: { argb: "000" } },
+                      bottom: { style: "double", color: { argb: "000" } },
+                      right: { style: "double", color: { argb: "000" } },
+                    };
+                  });
+                  const buffer = await workbook.xlsx.writeBuffer();
+                  const fileType =
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                  const fileExtension = ".xlsx";
+
+                  const blob = new Blob([buffer], { type: fileType });
+
+                  saveAs(
+                    blob,
+                    `TimeSheet_${unitName}_${parseDate(timesheet.month)}` +
+                      fileExtension
+                  );
+                }}
+              >
+                Export Excel
+              </button>
             </div>
             <table className="table-auto">
               <thead>
