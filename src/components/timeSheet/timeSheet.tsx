@@ -8,36 +8,38 @@ import { AiOutlineDown } from "react-icons/ai";
 import { timeSheetAnimation } from "../../utils/page-transition";
 //FramerMotion import
 import { motion, AnimatePresence } from "framer-motion";
+import { Timesheet } from "../../recoil/state";
+import { timeStamp } from "console";
 
-const TimeSheet: FunctionComponent = () => {
+interface TimeSheetProps {
+  timesheet: Timesheet;
+}
+
+const TimeSheet: FunctionComponent<TimeSheetProps> = ({ timesheet }) => {
   //Use State
   const [isOpen, setIsOpen] = useState(false);
-  const [workDays, setWorkDays] = useState<number[]>([]);
+  const [timeSheetData, setTimeSheetData] = useState([]);
 
-  useLayoutEffect(() => {
-    setWorkDays(getDaysInMonth(3, 2022));
-  }, []);
+  useEffect(() => {
+    const array = [];
+    const keys = Object.keys(timesheet.timesheet).filter((key) => {
+      return key !== "days";
+    });
 
-  function getDaysInMonth(month: number, year: number): number[] {
-    month--; // lets fix the month once, here and be done with it
-    var date = new Date(year, month, 1);
-    var days = [];
-    while (date.getMonth() === month) {
-      // Exclude weekends
-      var tmpDate = new Date(date);
-      var weekDay = tmpDate.getDay(); // week day
-      var day = tmpDate.getDate(); // day
+    keys.forEach((key) => {
+      array.push({ assistant: key, hours: timesheet.timesheet[key] });
+    });
 
-      if (weekDay % 6) {
-        // exclude 0=Sunday and 6=Saturday
-        days.push(day);
-      }
+    setTimeSheetData(array);
+  });
 
-      date.setDate(date.getDate() + 1);
-    }
+  const parseDate = (date) => {
+    const input = !isNaN(date) ? parseInt(date) : date;
+    var tempDate = new Date(input);
+    const splitDate = tempDate.toString().split(" ");
 
-    return days;
-  }
+    return `${splitDate[1]}, ${splitDate[3]}`;
+  };
 
   return (
     <div className="w-full select-none">
@@ -45,7 +47,9 @@ const TimeSheet: FunctionComponent = () => {
         className="flex items-center justify-between p-2 hover:bg-bt-dark-gray rounded-lg cursor-pointer mb-2"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span className="text-[1.5rem] font-medium">March, 2022</span>
+        <span className="text-[1.5rem] font-medium">
+          {parseDate(timesheet.month)}
+        </span>
         <AiOutlineDown
           className={`text-[1.5rem] transition-all duration-300 rotate-0 ${
             isOpen && "-rotate-180"
@@ -66,22 +70,37 @@ const TimeSheet: FunctionComponent = () => {
               <thead>
                 <tr>
                   <th>Assistant</th>
-                  {workDays?.map((day) => {
+                  {timesheet.timesheet?.days?.map((day) => {
                     return <th key={day}>{day}</th>;
                   })}
+                  <th>Total</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td className="border border-lg px-4 py-2">Aimen Sahnoun</td>
-                  {workDays?.map((day) => {
-                    return (
-                      <td className="border border-lg px-4 py-2" key={day}>
-                        {parseInt((Math.random() * 8 + 1).toString())}
+                {timeSheetData.map((data) => {
+                  return (
+                    <tr key={data.assistant}>
+                      <td className="border border-lg px-4 py-2">
+                        {data.assistant}
                       </td>
-                    );
-                  })}
-                </tr>
+                      {data.hours?.map((hour) => {
+                        return (
+                          <td className="border border-lg px-4 py-2" key={hour}>
+                            {hour}
+                          </td>
+                        );
+                      })}
+
+                      <td className="border border-lg px-4 py-2">
+                        {data.hours.reduce(
+                          (previousValue, currentValue) =>
+                            previousValue + currentValue,
+                          0
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </motion.div>

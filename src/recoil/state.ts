@@ -16,7 +16,14 @@ export interface Unit {
   responsible: string;
   imgUrl: string;
   responsibleId: string;
-  schedule : string | null;
+  schedule: string | null;
+}
+
+export interface Timesheet {
+  id: string;
+  unitId: string;
+  timesheet: {};
+  month: string;
 }
 
 export const employeesState = atom<Employee[]>({
@@ -47,4 +54,9 @@ export const previousTabState = atom<number>({
 export const selectedUnitState = atom<Unit | null>({
   key: "selectedUnitState",
   default: null,
-})
+});
+
+export const timesheetsState = atom<Timesheet[]>({
+  key: "timesheetsState",
+  default: [],
+});

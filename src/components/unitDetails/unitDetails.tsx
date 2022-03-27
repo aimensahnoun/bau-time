@@ -21,6 +21,7 @@ import TimeSheet from "../timeSheet/timeSheet";
 import ScheduleComponent from "../scheduleComponent/scheduleComponent";
 import AddSchedule from "../addScheduleModal/addScheduleModal";
 import AddAssitant from "../addAssitant/addAssitant";
+import AddTimesheet from "../addTimesheet/addTimesheet";
 
 //Utils import
 import supabase from "../../utils/supabase";
@@ -35,6 +36,7 @@ import {
   Unit,
   unitsState,
   userState,
+  timesheetsState,
 } from "../../recoil/state";
 
 const UnitDetails: FunctionComponent = () => {
@@ -42,6 +44,7 @@ const UnitDetails: FunctionComponent = () => {
   const employees = useRecoilValue(employeesState);
   const units = useRecoilValue(unitsState);
   const user = useRecoilValue(userState);
+  const timesheets = useRecoilValue(timesheetsState);
   const [_currentTab, setCurrentTab] = useRecoilState(currentTabState);
   const [previousTab, setPreviousTab] = useRecoilState(previousTabState);
   const [selectedUnit, setSelectedUnit] = useRecoilState(selectedUnitState);
@@ -58,6 +61,7 @@ const UnitDetails: FunctionComponent = () => {
   const [searchValue, setSearchValue] = useState("");
   const [unit, setUnit] = useState<Unit | null>(null);
   const [detailsTab, setDetailTab] = useState(0);
+  const [unitTimesheets, setUnitTimesheets] = useState([]);
 
   useLayoutEffect(() => {
     setUnit(
@@ -95,7 +99,13 @@ const UnitDetails: FunctionComponent = () => {
       );
     });
     setEmplyeeList(filteredEmployees);
-  }, [employees, searchValue , unit]);
+  }, [employees, searchValue, unit]);
+
+  useEffect(() => {
+    setUnitTimesheets(
+      timesheets.filter((timesheet) => timesheet.unitId === unit?.id)
+    );
+  }, [timesheets, employees, unit]);
 
   return (
     <AnimatePresence exitBeforeEnter>
@@ -108,6 +118,13 @@ const UnitDetails: FunctionComponent = () => {
         isModalOpen={isModalOpen && detailsTab === 1}
         setIsModalOpen={setIsModalOpen}
         unitId={unit?.id}
+      />
+
+      <AddTimesheet
+        isModalOpen={isModalOpen && detailsTab === 2}
+        setIsModalOpen={setIsModalOpen}
+        unitId={unit?.id}
+        filteredEmployees={employeeList}
       />
 
       <motion.div
@@ -199,9 +216,10 @@ const UnitDetails: FunctionComponent = () => {
                 </div>
               </div>
             ) : (
-              <div className="w-full">
-                <TimeSheet />
-                <TimeSheet />
+              <div className="w-full flex flex-col gap-y-2">
+                {unitTimesheets.map((timesheet) => {
+                  return <TimeSheet key={timesheet.id} timesheet={timesheet} />;
+                })}
               </div>
             )}
           </div>

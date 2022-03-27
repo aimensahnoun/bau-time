@@ -100,7 +100,7 @@ const AddSchedule: FunctionComponent<AddScheduleProps> = ({
             onDragLeave={onDragLeave}
             onDrop={onDrop}
             onDragOver={onDragOver}
-            className="w-full h-[20rem] rounded-lg border-[1px] border-white border-dashed flex flex-col justify-center items-center cursor-pointer"
+            className="w-[20rem] h-[20rem] rounded-lg border-[1px] border-white border-dashed flex flex-col justify-center items-center cursor-pointer"
             onClick={() => {
               scheduleRef.current?.click();
             }}
