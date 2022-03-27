@@ -68,7 +68,7 @@ const EmployeesContent: FunctionComponent = () => {
         animate="enter"
         exit="exit"
         transition={{ type: "linear" }}
-        className={`dash-body p-10`}
+        className={`xl:w-[calc(100%-15rem)] 2xl:w-[calc(100%-20rem)] xl:p-10 overflow-y-scroll pb-[10rem]`}
       >
         {/*  Title Bar */}
         <div className="flex  flex-col gap-y-[2rem]">
@@ -93,7 +93,7 @@ const EmployeesContent: FunctionComponent = () => {
 
         {/* Body */}
 
-        <div className="w-full grid grid-gap-3 2xl:grid-cols-10 mt-6">
+        <div className="w-full grid grid-gap-4 gap-y-8 xl:grid-cols-5 2xl:grid-cols-10 mt-8 mb-[5rem]">
           {employessList.map((employee) => {
             return (
             <EmployeeItem key={employee.id} employee={employee} />

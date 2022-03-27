@@ -10,7 +10,7 @@ const ScheduleComponent: FunctionComponent<ScheduleProps> = ({ schedule }) => {
   return (
     <iframe
       id="iframepdf"
-      className="w-full h-[70vh]"
+      className="w-full xl:h-[65vh] -mt-[1rem] 2xl:h-[70vh] overflow-auto"
       src={schedule}
     ></iframe>
   );

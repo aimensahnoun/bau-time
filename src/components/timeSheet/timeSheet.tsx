@@ -79,6 +79,7 @@ const TimeSheet: FunctionComponent<TimeSheetProps> = ({
             animate="enter"
             exit="exit"
             transition={{ type: "linear" }}
+            className="flex flex-col gap-y-[2rem] overflow-y-scroll"
           >
             <div className="flex w-full justify-end items-center gap-x-4">
               {!timesheet.submitted && (
@@ -174,7 +175,7 @@ const TimeSheet: FunctionComponent<TimeSheetProps> = ({
                 Export Excel
               </button>
             </div>
-            <table className="table-auto">
+            <table className="table-auto xl:text-[.8rem] overflow-x-scroll w-[100%]">
               <thead>
                 <tr>
                   <th>Assistant</th>
@@ -188,7 +189,7 @@ const TimeSheet: FunctionComponent<TimeSheetProps> = ({
                 {timeSheetData.map((data) => {
                   return (
                     <tr key={data.assistant}>
-                      <td className="border border-lg px-4 py-2">
+                      <td className="border border-lg xl:px-2 2x:px-4 py-2">
                         {data.assistant}
                       </td>
                       {data.hours?.map((hour, index) => {
@@ -211,7 +212,7 @@ const TimeSheet: FunctionComponent<TimeSheetProps> = ({
                               }
                               setTimeSheetData(temp);
                             }}
-                            className="border border-lg px-4 py-2"
+                            className="border border-lg xl:px-2 2x:px-4"
                             key={index}
                           >
                             {hour}

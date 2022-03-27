@@ -26,7 +26,7 @@ const DashboardContent: FunctionComponent = () => {
         animate="enter"
         exit="exit"
         transition={{ type: "linear" }}
-        className={`dash-body p-10`}
+        className={`xl:w-[calc(100%-15rem)] 2xl:w-[calc(100%-20rem)] xl:p-10 overflow-y-scroll pb-[10rem]`}
       >
         <div className="flex flex-col gap-y-[1.5rem]">
           <span className="font-bold text-[1.5rem] ">

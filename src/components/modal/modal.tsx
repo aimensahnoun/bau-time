@@ -47,7 +47,7 @@ const Modal: FunctionComponent<ModalProps> = ({
             initial="hidden"
             animate="enter"
             exit="hidden"
-            className={`w-fit xl:h-[60%] h-[50%] max-h-fit bg-bt-accent-bg rounded-lg p-6 overflow-auto`}
+            className={`min-w-[30rem] w-fit xl:h-[60%] h-[50%] max-h-fit bg-bt-accent-bg rounded-lg p-6 overflow-auto`}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex w-full items-center justify-between mb-[1rem] ">
