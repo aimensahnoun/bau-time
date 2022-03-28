@@ -37,6 +37,7 @@ import {
   unitsState,
   userState,
   timesheetsState,
+  unitDetailsTab,
 } from "../../recoil/state";
 
 const UnitDetails: FunctionComponent = () => {
@@ -45,6 +46,8 @@ const UnitDetails: FunctionComponent = () => {
   const units = useRecoilValue(unitsState);
   const user = useRecoilValue(userState);
   const timesheets = useRecoilValue(timesheetsState);
+  const [unitDetailsCurrentTab, setUnitDetailsCurrentTab] =
+    useRecoilState(unitDetailsTab);
   const [_currentTab, setCurrentTab] = useRecoilState(currentTabState);
   const [previousTab, setPreviousTab] = useRecoilState(previousTabState);
   const [selectedUnit, setSelectedUnit] = useRecoilState(selectedUnitState);
@@ -60,7 +63,7 @@ const UnitDetails: FunctionComponent = () => {
   );
   const [searchValue, setSearchValue] = useState("");
   const [unit, setUnit] = useState<Unit | null>(null);
-  const [detailsTab, setDetailTab] = useState(0);
+  const [detailsTab, setDetailTab] = useState(unitDetailsCurrentTab);
   const [unitTimesheets, setUnitTimesheets] = useState([]);
 
   useLayoutEffect(() => {
@@ -146,6 +149,7 @@ const UnitDetails: FunctionComponent = () => {
                     setSelectedUnit(null);
                     setCurrentTab(previousTab);
                     setPreviousTab(0);
+                    setUnitDetailsCurrentTab(0);
                   }}
                 />
               )}
@@ -220,7 +224,8 @@ const UnitDetails: FunctionComponent = () => {
                 {unitTimesheets
                   .sort((a, b) => new Date(b.month) - new Date(a.month))
                   .map((timesheet) => {
-                    if(user?.type === "Admin" && !timesheet.submitted) return null
+                    if (user?.type === "Admin" && !timesheet.submitted)
+                      return null;
                     return (
                       <TimeSheet
                         key={timesheet.id}

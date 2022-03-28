@@ -9,18 +9,26 @@ import { AiOutlineHourglass } from "react-icons/ai";
 import { FiUsers } from "react-icons/fi";
 
 //recoil import
-import { Unit } from "../../recoil/state";
+import { useRecoilState } from "recoil";
+import { Unit, unitDetailsTab } from "../../recoil/state";
 import CustomImage from "../customImage/customImage";
 
 interface UnitComponentProps {
   unit: Unit;
-  onClick : () => void;
+  onClick: () => void;
 }
 
-const UnitComponent: FunctionComponent<UnitComponentProps> = ({ unit , onClick}) => {
+const UnitComponent: FunctionComponent<UnitComponentProps> = ({
+  unit,
+  onClick,
+}) => {
+  //Recoil State
+  const [_unitDetailsCurrentTab, setUnitDetailsCurrentTab] =
+    useRecoilState(unitDetailsTab);
+
   return (
     <div
-    onClick={onClick}
+      onClick={onClick}
       className={`h-[12rem] bg-bt-dark-gray rounded-xl flex flex-col items-center justify-between py-3 transition-all cursor-pointer duration-300 select-none w-[11rem]
 `}
     >
@@ -52,6 +60,8 @@ const UnitComponent: FunctionComponent<UnitComponentProps> = ({ unit , onClick})
           onClick={(e) => {
             //Prevent parents onClick event
             e.stopPropagation();
+            setUnitDetailsCurrentTab(1);
+            onClick();
           }}
         >
           <FiUsers />
@@ -61,6 +71,8 @@ const UnitComponent: FunctionComponent<UnitComponentProps> = ({ unit , onClick})
           onClick={(e) => {
             //Prevent parents onClick event
             e.stopPropagation();
+            setUnitDetailsCurrentTab(2);
+            onClick();
           }}
         >
           <AiOutlineHourglass />

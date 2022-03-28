@@ -61,3 +61,8 @@ export const timesheetsState = atom<Timesheet[]>({
   key: "timesheetsState",
   default: [],
 });
+
+export const unitDetailsTab = atom<number>({
+  key: "unitDetailsTab",
+  default: 0,
+})
