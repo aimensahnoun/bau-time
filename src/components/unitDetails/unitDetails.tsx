@@ -91,13 +91,15 @@ const UnitDetails: FunctionComponent = () => {
         employees.filter(
           (employee) =>
             (employee.office === unit?.name || employee.office === unit?.id) &&
-            employee.type === "Assistant"
+            employee.type === "Assistant" &&
+            !employee.isHidden && !employee.isCreated
         )
       );
     const filteredEmployees = employees.filter((employee) => {
       return (
         (employee.office === unit?.name || employee.office === unit?.id) &&
         employee.type === "Assistant" &&
+        !employee.isHidden && !employee.isCreated &&
         employee.name.toLowerCase().includes(searchValue.toLowerCase())
       );
     });

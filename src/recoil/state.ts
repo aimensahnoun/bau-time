@@ -8,6 +8,8 @@ export interface Employee {
   type: string;
   imgUrl: string;
   office: string | null;
+  isHidden : boolean;
+  isCreated : boolean
 }
 
 export interface Unit {

@@ -78,13 +78,16 @@ const AddAssitant: FunctionComponent<AddScheduleProps> = ({
       passport: urls[0],
       residence: urls[3],
       insurance: urls[2],
+      studentNumber: d.studentNumber,
+      isCreated: true,
+      isDeleted : false
     });
 
-    if(error) console.log("smth went wrong")
-    setPassport(null)
-    setImage(null)
-    setInsurance(null)
-    setResidence(null)
+    if (error) console.log("smth went wrong");
+    setPassport(null);
+    setImage(null);
+    setInsurance(null);
+    setResidence(null);
 
     setIsSubmitting(false);
     setIsModalOpen(false);
@@ -137,6 +140,20 @@ const AddAssitant: FunctionComponent<AddScheduleProps> = ({
               <span className="text-red-600">This field is required</span>
             )}
           </div>
+        </div>
+
+        {/* Student Number Field */}
+        <div className="flex flex-col gap-y-2">
+          <span className="font-medium">Student Number:</span>
+          <input
+            className="w-[32.5rem] h-[3rem] p-2 bg-bt-dark-gray rounded-lg outline-none"
+            type="number"
+            placeholder="1801539"
+            {...register("studentNumber", { required: true })}
+          />
+          {errors.department && (
+            <span className="text-red-600">This field is required</span>
+          )}
         </div>
 
         {/* Department Field */}
