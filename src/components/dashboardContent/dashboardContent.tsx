@@ -12,7 +12,7 @@ import { dashboardTabsVariants } from "../../utils/page-transition";
 
 //Recoil content
 import { useRecoilValue } from "recoil";
-import { userState, employeesState } from "../../recoil/state";
+import { userState, employeesState, unitsState } from "../../recoil/state";
 
 //supabase import
 import supabase from "../../utils/supabase";
@@ -21,6 +21,7 @@ const DashboardContent: FunctionComponent = () => {
   //Recoil state
   const user = useRecoilValue(userState);
   const employees = useRecoilValue(employeesState);
+  const units = useRecoilValue(unitsState);
 
   const [filteredEmployees, setFilteredEmployees] = useState(
     employees.filter((employee) => {
@@ -72,7 +73,7 @@ const DashboardContent: FunctionComponent = () => {
             </div>
 
             <div className="w-[50%] h-[15rem] flex flex-col gap-y-2 bg-bt-dark-gray rounded-lg overflow-y-scroll p-4">
-              {filteredEmployees.map((employee) => {
+              {filteredEmployees.length > 0 ? filteredEmployees.map((employee) => {
                 return (
                   <div
                     key={employee.id}
@@ -80,7 +81,13 @@ const DashboardContent: FunctionComponent = () => {
                   >
                     <div className="flex flex-col gap-y-2">
                       <span>{employee.name}</span>
-                      <span>{employee.office}</span>
+                      <span>
+                        {
+                          units.filter((unit) => {
+                            return unit.id === employee.office;
+                          })[0]?.name
+                        }
+                      </span>
                     </div>
 
                     <div className="flex items-center gap-x-2">
@@ -125,7 +132,7 @@ const DashboardContent: FunctionComponent = () => {
                     </div>
                   </div>
                 );
-              })}
+              }) : <span>No new students to approve</span>}
             </div>
           </div>
         </div>

@@ -1,11 +1,13 @@
 //React import
-import { FunctionComponent } from "react";
+import { FunctionComponent, useState } from "react";
 
 //Component import
 import CustomImage from "../customImage/customImage";
+import EmployeeDetails from "../employeeDetails/employeeDetails";
 
 //Recoil import
-import { Employee } from "../../recoil/state";
+import { useRecoilValue, useRecoilState } from "recoil";
+import { Employee, userState, selectedEmployeeState } from "../../recoil/state";
 
 //Icons import
 import { AiFillDelete } from "react-icons/ai";
@@ -17,11 +19,25 @@ interface EmployeeProps {
 }
 
 const EmployeeItem: FunctionComponent<EmployeeProps> = ({ employee }) => {
+  const user = useRecoilValue(userState);
+  const [_selectedEmployee, setSelectedEmployee] = useRecoilState(
+    selectedEmployeeState
+  );
+
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <div
+      onClick={() => {
+        setSelectedEmployee(employee);
+
+        setIsOpen(true);
+      }}
       className={`h-[12rem] bg-bt-dark-gray rounded-xl flex flex-col items-center py-3 transition-all cursor-pointer duration-300 select-none w-[11rem]
 `}
     >
+      <EmployeeDetails isModalOpen={isOpen} setIsModalOpen={setIsOpen} />
+
       {/* Employee image */}
       <div className="w-[3rem] h-[3rem] bg-white rounded-full  -translate-y-[1.7rem] ">
         <CustomImage
@@ -46,21 +62,24 @@ const EmployeeItem: FunctionComponent<EmployeeProps> = ({ employee }) => {
         {employee.type}
       </span>
 
-      <div
-        className="mt-auto w-[1.5rem] h-[1.5rem] rounded-full flex items-center justify-center bg-[#565672]"
-        onClick={async () => {
-          const { data, error } = await supabase
-            .from("workers")
-            .update({ isHidden: true, isDeleted: true })
-            .match({ id: employee.id });
+      {user?.type !== "Admin" && (
+        <div
+          className="mt-auto w-[1.5rem] h-[1.5rem] rounded-full flex items-center justify-center bg-[#565672]"
+          onClick={async (e) => {
+            e.stopPropagation()
+            const { data, error } = await supabase
+              .from("workers")
+              .update({ isHidden: true, isDeleted: true })
+              .match({ id: employee.id });
 
-          if (error) {
-            console.log(error);
-          }
-        }}
-      >
-        <AiFillDelete />
-      </div>
+            if (error) {
+              console.log(error);
+            }
+          }}
+        >
+          <AiFillDelete />
+        </div>
+      )}
     </div>
   );
 };

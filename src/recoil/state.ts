@@ -68,3 +68,8 @@ export const unitDetailsTab = atom<number>({
   key: "unitDetailsTab",
   default: 0,
 })
+
+export const selectedEmployeeState = atom<Employee | null>({
+  key: "selectedEmployee",
+  default: null,
+})
