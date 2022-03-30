@@ -13,6 +13,10 @@ import { Timesheet } from "../../recoil/state";
 //Supabase import
 import supabase from "../../utils/supabase";
 
+//Recoil import
+import { useRecoilValue } from "recoil";
+import { employeesState } from "../../recoil/state";
+
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 
@@ -29,6 +33,8 @@ const TimeSheet: FunctionComponent<TimeSheetProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [timeSheetData, setTimeSheetData] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
+
+  const employees = useRecoilValue(employeesState);
 
   useEffect(() => {
     console.log(timeSheetData);
@@ -146,15 +152,20 @@ const TimeSheet: FunctionComponent<TimeSheetProps> = ({
                   };
                   sheet.addRow([
                     "Assistant",
+                    "Student Number",
                     ...timesheet.timesheet?.days,
                     "Total",
                   ]).font = {
                     size: 16,
                     bold: true,
                   };
+
                   timeSheetData.forEach((data) => {
                     sheet.addRow([
                       data.assistant,
+                      employees.filter((e) => {
+                        return e.name === data?.assistant;
+                      })[0].studentNumber,
                       ...data.hours,
                       data.hours.reduce((a, b) => a + b, 0),
                     ]).border = {
@@ -203,16 +214,17 @@ const TimeSheet: FunctionComponent<TimeSheetProps> = ({
                           <td
                             contentEditable={isEditing}
                             suppressContentEditableWarning={true}
+                            cur
                             onInput={(e) => {
                               var temp = [...timeSheetData];
                               for (let i = 0; i < temp.length; i++) {
                                 if (temp[i].assistant === data.assistant) {
                                   let newHours = [...temp[i].hours];
                                   newHours[index] = isNaN(
-                                    parseInt(e.target.innerText)
+                                    parseFloat(e.target.innerText)
                                   )
                                     ? 0
-                                    : parseInt(e.target.innerText);
+                                    : parseFloat(e.target.innerText);
                                   temp[i].hours = newHours;
                                 }
                               }

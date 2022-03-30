@@ -80,10 +80,10 @@ const AddAssitant: FunctionComponent<AddScheduleProps> = ({
       insurance: urls[2],
       studentNumber: d.studentNumber,
       isCreated: true,
-      isDeleted : false
+      isHidden : false
     });
 
-    if (error) console.log("smth went wrong");
+    if (error) console.log("smth went wrong" , error);
     setPassport(null);
     setImage(null);
     setInsurance(null);

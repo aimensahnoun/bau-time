@@ -21,8 +21,8 @@ import AddResponsible from "../addResponsible/addResponsible";
 import EmployeeItem from "../employee/employee";
 
 //Recoil import
-import { useRecoilState } from "recoil";
-import { employeesState } from "../../recoil/state";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { employeesState, userState } from "../../recoil/state";
 
 //supabase import
 import supabase from "../../utils/supabase";
@@ -30,6 +30,8 @@ import supabase from "../../utils/supabase";
 const EmployeesContent: FunctionComponent = () => {
   //Recoil State
   const [employees, setEmployees] = useRecoilState(employeesState);
+  const user = useRecoilValue(userState);
+
   //UseState
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
@@ -45,12 +47,18 @@ const EmployeesContent: FunctionComponent = () => {
   }, []);
 
   useEffect(() => {
-    if (searchValue.length === 0) return setEmployessList(employees);
+    if (searchValue.length === 0)
+      return setEmployessList(
+        employees.filter((employee) => {
+          return employee.id !== user?.id;
+        })
+      );
     const filteredEmployees = employees.filter((employee) => {
       return (
-        employee.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-        employee.office?.toLowerCase().includes(searchValue.toLowerCase()) ||
-        employee.type.toLowerCase().includes(searchValue.toLowerCase())
+        employee.id !== user?.id &&
+        (employee.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+          employee.office?.toLowerCase().includes(searchValue.toLowerCase()) ||
+          employee.type.toLowerCase().includes(searchValue.toLowerCase()))
       );
     });
     setEmployessList(filteredEmployees);
@@ -95,9 +103,7 @@ const EmployeesContent: FunctionComponent = () => {
 
         <div className="w-full grid grid-gap-4 gap-y-8 xl:grid-cols-5 2xl:grid-cols-10 mt-8 mb-[5rem]">
           {employessList.map((employee) => {
-            return (
-            <EmployeeItem key={employee.id} employee={employee} />
-            );
+            return <EmployeeItem key={employee.id} employee={employee} />;
           })}
         </div>
       </motion.div>
