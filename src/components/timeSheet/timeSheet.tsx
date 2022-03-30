@@ -97,7 +97,10 @@ const TimeSheet: FunctionComponent<TimeSheetProps> = ({
                       const { data, error } = await supabase
                         .from("timesheets")
                         .update({ timesheet: newData })
-                        .match({ month: timesheet.month });
+                        .match({
+                          month: timesheet.month,
+                          unitId: timesheet.unitId,
+                        });
 
                       if (error) console.log(error);
                     }
@@ -114,7 +117,10 @@ const TimeSheet: FunctionComponent<TimeSheetProps> = ({
                     const { data, error } = await supabase
                       .from("timesheets")
                       .update({ submitted: true })
-                      .match({ month: timesheet.month });
+                      .match({
+                        month: timesheet.month,
+                        unitId: timesheet.unitId,
+                      });
 
                     if (error) console.log(error);
                   }}
