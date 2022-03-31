@@ -55,13 +55,6 @@ const SignInForm: FunctionComponent<{}> = () => {
     password: string;
   };
 
-  //Login handler
-  const handleLogin = (): void => {
-    if (password === "" || userName === "")
-      return alert("Please fill in all fields");
-    //Forward user to dashboard page
-    router.push("/dashboard");
-  };
 
   return (
     <div

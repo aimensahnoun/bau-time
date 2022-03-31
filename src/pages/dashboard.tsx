@@ -15,6 +15,7 @@ import UnitContent from "../components/unitContent/unitContent";
 import EmployeesContent from "../components/employeesContent/employeesContent";
 import SettingsContent from "../components/settingsContent/settingsContent";
 import UnitDetails from "../components/unitDetails/unitDetails";
+import NotificationModal from "../components/notificationModal/notificationModal";
 
 //Icons import
 import { MdOutlineSpaceDashboard } from "react-icons/md";
@@ -100,7 +101,7 @@ const Dashboard: NextPage = () => {
       <Head>
         <title>BAU Time | Dashboard</title>
       </Head>
-
+      <NotificationModal />
       {/* Navbar */}
       <nav className="h-[5rem] w-full bg-bt-accent-bg border-b-[1px] border-bt-dark-gray p-2 flex items-center justify-between">
         <h1 className="font-bold text-[1.5rem] ml-5 pt-2  overflow-hidden">

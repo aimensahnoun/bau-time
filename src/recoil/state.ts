@@ -73,3 +73,8 @@ export const selectedEmployeeState = atom<Employee | null>({
   key: "selectedEmployee",
   default: null,
 })
+
+export const notificationModalState = atom<boolean>({
+  key: "notificationModalState",
+  default: false,
+})

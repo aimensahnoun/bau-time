@@ -7,6 +7,10 @@ import { VscBell } from "react-icons/vsc";
 //Animation import
 import gsap from "gsap";
 
+//Recoil import
+import { useRecoilState } from "recoil";
+import { notificationModalState} from "../../recoil/state";
+
 interface NotificationBellProps {
   hasNotifications: boolean;
 }
@@ -14,6 +18,10 @@ interface NotificationBellProps {
 const NotificationBell: FunctionComponent<NotificationBellProps> = ({
   hasNotifications,
 }) => {
+
+
+  const [notificationModal, setNotificationModal] = useRecoilState(notificationModalState);
+
   return (
     <>
       <VscBell
@@ -25,6 +33,7 @@ const NotificationBell: FunctionComponent<NotificationBellProps> = ({
             { rotate: -5 },
             { rotate: 0, duration: 2, ease: "elastic.out(5 , .2)" }
           );
+          setNotificationModal(!notificationModal);
         }}
       />
       {hasNotifications ? (
