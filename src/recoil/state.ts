@@ -29,6 +29,15 @@ export interface Timesheet {
   submitted: boolean;
 }
 
+export interface Notification {
+  id: string;
+  message: string;
+  created_at: string;
+  isRead : boolean;
+  sent_to : string;
+  sender : string;
+}
+
 export const employeesState = atom<Employee[]>({
   key: "employeesState",
   default: [],
@@ -63,6 +72,12 @@ export const timesheetsState = atom<Timesheet[]>({
   key: "timesheetsState",
   default: [],
 });
+
+export const notificationState = atom<Notification[]>({
+  key: "notificationState",
+  default: [],
+  
+})
 
 export const unitDetailsTab = atom<number>({
   key: "unitDetailsTab",

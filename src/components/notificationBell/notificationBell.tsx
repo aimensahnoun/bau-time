@@ -1,5 +1,5 @@
 //React import
-import { FunctionComponent } from "react";
+import { FunctionComponent, useState, useEffect } from "react";
 
 //Icons import
 import { VscBell } from "react-icons/vsc";
@@ -8,8 +8,13 @@ import { VscBell } from "react-icons/vsc";
 import gsap from "gsap";
 
 //Recoil import
-import { useRecoilState } from "recoil";
-import { notificationModalState} from "../../recoil/state";
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  notificationModalState,
+  notificationState,
+  userState,
+  Notification,
+} from "../../recoil/state";
 
 interface NotificationBellProps {
   hasNotifications: boolean;
@@ -18,9 +23,35 @@ interface NotificationBellProps {
 const NotificationBell: FunctionComponent<NotificationBellProps> = ({
   hasNotifications,
 }) => {
+  //Recoil state
+  const notifications = useRecoilValue(notificationState);
+  const user = useRecoilValue(userState);
+  const [notificationModal, setNotificationModal] = useRecoilState(
+    notificationModalState
+  );
 
+  //Use state
+  const [myNotifications, setMyNotifications] = useState<Notification[]>([]);
+  const [hasUnread, setHasUnread] = useState<boolean>(false);
 
-  const [notificationModal, setNotificationModal] = useRecoilState(notificationModalState);
+  useEffect(() => {
+    if (notifications.length > 0) {
+      setMyNotifications(
+        notifications.filter(
+          (notification) => notification.sent_to === user?.id
+        )
+      );
+    }
+  }, [notifications]);
+
+  useEffect(() => {
+    if (myNotifications.length === 0) setHasUnread(false);
+    else
+      setHasUnread(
+        myNotifications.some((notification) => notification.isRead === false)
+      );
+  }, [myNotifications]);
+
 
   return (
     <>
@@ -36,7 +67,7 @@ const NotificationBell: FunctionComponent<NotificationBellProps> = ({
           setNotificationModal(!notificationModal);
         }}
       />
-      {hasNotifications ? (
+      {hasUnread ? (
         <>
           <div className="w-[.5rem] h-[.5rem] bg-red-600 rounded-full absolute right-1 top-0 animate-ping" />
           <div className="w-[.5rem] h-[.5rem] bg-red-600 rounded-full absolute right-1 top-0 " />

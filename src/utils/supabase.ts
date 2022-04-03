@@ -16,7 +16,7 @@ const supabase = createClient(
 );
 
 export const fetchInitialData = async (props) => {
-  const { setEmployees, setUnits, setTimesheets } = props;
+  const { setEmployees, setUnits, setTimesheets, setNotifications } = props;
 
   const wrokersResult = await supabase.from("workers").select();
   if (!wrokersResult.error) setEmployees(wrokersResult.data);
@@ -26,10 +26,15 @@ export const fetchInitialData = async (props) => {
 
   const timeSheetResult = await supabase.from("timesheets").select();
   if (!timeSheetResult.error) setTimesheets(timeSheetResult.data);
+
+  const notificationsResult = await supabase.from("notifications").select();
+  if (!notificationsResult.error) setNotifications(notificationsResult.data);
 };
 
 export const listenToData = async (props) => {
-  const { setEmployees, setUnits, setTimesheets } = props;
+  const { setEmployees, setUnits, setTimesheets, setNotifications } = props;
+
+  const audio = new Audio("/public/assets/notification.wav");
 
   supabase
     .from("workers")
@@ -64,6 +69,18 @@ export const listenToData = async (props) => {
       if (!data) return;
 
       setTimesheets(data);
+    })
+    .subscribe();
+
+  supabase
+    .from("notifications")
+    .on("*", async (payload) => {
+      const { data, error } = await supabase.from("notifications").select();
+      console.log(error);
+      if (error) return;
+      if (!data) return;
+
+      setNotifications(data);
     })
     .subscribe();
 };

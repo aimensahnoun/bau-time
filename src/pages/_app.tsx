@@ -14,6 +14,7 @@ import {
   unitsState,
   userState,
   timesheetsState,
+  notificationState
 } from "../recoil/state";
 
 //Supabase import
@@ -31,6 +32,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [_units, setUnits] = useRecoilState(unitsState);
   const [_user, setUser] = useRecoilState(userState);
   const [_timeSheets, setTimesheets] = useRecoilState(timesheetsState);
+  const [_notifications, setNotifications] = useRecoilState(notificationState);
 
   //Router
   const router = useRouter();
@@ -54,8 +56,8 @@ function MyApp({ Component, pageProps }: AppProps) {
       if (data) setUser(data[0]);
     })();
 
-    fetchInitialData({ setEmployees, setUnits, setTimesheets });
-    listenToData({ setEmployees, setUnits, setTimesheets });
+    fetchInitialData({ setEmployees, setUnits, setTimesheets , setNotifications });
+    listenToData({ setEmployees, setUnits, setTimesheets , setNotifications });
 
     setIsLoading(false);
   }, []);

@@ -35,7 +35,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 
 //Recoil import
 import { useRecoilValue, useRecoilState } from "recoil";
-import { unitsState, userState, currentTabState } from "../recoil/state";
+import { unitsState, userState, currentTabState , notificationState} from "../recoil/state";
 
 const Dashboard: NextPage = () => {
   const router = useRouter();
@@ -43,6 +43,7 @@ const Dashboard: NextPage = () => {
   //Recoil state
   const units = useRecoilValue(unitsState);
   const user = useRecoilValue(userState);
+  
   const [currentTab, setCurrentTab] = useRecoilState(currentTabState);
   //Initial loading state
   const [isLoading, setIsLoading] = useState(true);
