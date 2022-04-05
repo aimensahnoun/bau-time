@@ -14,13 +14,13 @@ import { uploadFile, avatarImage } from "../../utils/upload-file";
 
 //Recoil
 import { useRecoilValue } from "recoil";
-import { Employee, employeesState } from "../../recoil/state";
+import { Employee, employeesState , userState } from "../../recoil/state";
 
 //Form hook
 import { useForm } from "react-hook-form";
 
 //Id generator
-import uniqid from "uniqid";
+import { v4 as uuidv4 } from 'uuid';
 
 interface AddScheduleProps {
   isModalOpen: boolean;
@@ -41,6 +41,9 @@ const AddAssitant: FunctionComponent<AddScheduleProps> = ({
   const [residence, setResidence] = useState<File | null>(null);
   const [image, setImage] = useState<File | null>(null);
   const [insurance, setInsurance] = useState<File | null>(null);
+
+  //Recoil  
+  const user = useRecoilValue(userState);
 
   //Ref
   const scheduleRef = useRef(null);
@@ -68,7 +71,7 @@ const AddAssitant: FunctionComponent<AddScheduleProps> = ({
       name: d.name,
       type: "Assistant",
       imgUrl: urls[1],
-      id: uniqid(),
+      id: uuidv4(),
       office: unitId,
       startingDate: d.startingDate,
       endDate: d.endDate,
@@ -81,6 +84,14 @@ const AddAssitant: FunctionComponent<AddScheduleProps> = ({
       studentNumber: d.studentNumber,
       isCreated: true,
       isHidden : false
+    });
+
+    const result = await supabase.from("notifications").insert({
+      message : `${d.name} has been added as an assistant`,
+      sent_to : "db7f30da-155e-4f34-83bf-6947569d58b4",
+      sender : user?.id,
+      isRead : false,
+      id : uuidv4()
     });
 
     if (error) console.log("smth went wrong" , error);

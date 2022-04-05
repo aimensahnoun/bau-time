@@ -35,7 +35,13 @@ import ClipLoader from "react-spinners/ClipLoader";
 
 //Recoil import
 import { useRecoilValue, useRecoilState } from "recoil";
-import { unitsState, userState, currentTabState , notificationState} from "../recoil/state";
+import {
+  unitsState,
+  userState,
+  currentTabState,
+  notificationState,
+} from "../recoil/state";
+import CustomImage from "../components/customImage/customImage";
 
 const Dashboard: NextPage = () => {
   const router = useRouter();
@@ -43,7 +49,7 @@ const Dashboard: NextPage = () => {
   //Recoil state
   const units = useRecoilValue(unitsState);
   const user = useRecoilValue(userState);
-  
+
   const [currentTab, setCurrentTab] = useRecoilState(currentTabState);
   //Initial loading state
   const [isLoading, setIsLoading] = useState(true);
@@ -113,15 +119,16 @@ const Dashboard: NextPage = () => {
           <div className="w-[1.5rem] h-[1.rem] relative">
             <NotificationBell hasNotifications={true} />
           </div>
-          <div className="h-10 w-10 bg-gray-300 rounded-lg mr-6">
-            <Image
+          <div className="h-10 w-10 bg-gray-300 rounded-lg mr-6 relative">
+            <CustomImage
               src={
-                "https://images.pexels.com/photos/38554/girl-people-landscape-sun-38554.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+                user?.imgUrl
               }
               className="rounded-lg object-cover"
               alt="profile-avatar"
               width={"100%"}
               height={"100%"}
+              layout="fill"
             />
           </div>
         </div>

@@ -15,11 +15,13 @@ import supabase from "../../utils/supabase";
 
 //Recoil import
 import { useRecoilValue } from "recoil";
-import { employeesState } from "../../recoil/state";
+import { employeesState, userState } from "../../recoil/state";
 
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 
+//Id generator
+import { v4 as uuidv4 } from 'uuid';
 interface TimeSheetProps {
   timesheet: Timesheet;
   unitName: string;
@@ -35,6 +37,7 @@ const TimeSheet: FunctionComponent<TimeSheetProps> = ({
   const [isEditing, setIsEditing] = useState(false);
 
   const employees = useRecoilValue(employeesState);
+  const user = useRecoilValue(userState);
 
   useEffect(() => {
     console.log(timeSheetData);
@@ -127,6 +130,18 @@ const TimeSheet: FunctionComponent<TimeSheetProps> = ({
                         month: timesheet.month,
                         unitId: timesheet.unitId,
                       });
+
+                    const result = await supabase.from("notifications").insert({
+                      message: `${unitName} has submitted the timesheet for ${parseDate(
+                        timesheet.month
+                      )}`,
+                      sent_to: "db7f30da-155e-4f34-83bf-6947569d58b4",
+                      sender: user?.id,
+                      isRead: false,
+                      id : uuidv4()
+                    });
+
+                    if (result.error) console.log(result.error);
 
                     if (error) console.log(error);
                   }}

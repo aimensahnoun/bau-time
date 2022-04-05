@@ -67,6 +67,9 @@ const EmployeeItem: FunctionComponent<EmployeeProps> = ({ employee }) => {
           className="mt-auto w-[1.5rem] h-[1.5rem] rounded-full flex items-center justify-center bg-[#565672]"
           onClick={async (e) => {
             e.stopPropagation()
+            const confirmDelete = confirm("Are you sure you want to delete this employee?")
+            if(!confirmDelete) return
+
             const { data, error } = await supabase
               .from("workers")
               .update({ isHidden: true, isDeleted: true })

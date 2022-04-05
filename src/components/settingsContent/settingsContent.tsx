@@ -1,8 +1,5 @@
 //React component
-import { FunctionComponent, useState } from "react";
-
-//ReactJS import
-import Image from "next/image";
+import { FunctionComponent, useState, useRef } from "react";
 
 //FramerMotion import
 import { motion, AnimatePresence } from "framer-motion";
@@ -12,6 +9,18 @@ import { dashboardTabsVariants } from "../../utils/page-transition";
 
 //Icons import
 import { RiArrowUpSLine } from "react-icons/ri";
+
+//recoil import
+import { useRecoilState } from "recoil";
+import { userState } from "../../recoil/state";
+
+//Component import
+import CustomImage from "../customImage/customImage";
+
+//supabase import
+import supabase from "../../utils/supabase";
+import { uploadFile } from "../../utils/upload-file";
+import { toast } from "react-toastify";
 
 const EmployeesContent: FunctionComponent = () => {
   //Tabs for settings page
@@ -25,6 +34,14 @@ const EmployeesContent: FunctionComponent = () => {
 
   //Tracking drop down state
   const [dropDownOpen, setDropDownOpen] = useState(false);
+
+  const [newPassword, setNewPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  //Recoil state
+  const [user, setUser] = useRecoilState(userState);
+
+  const profileImageRef = useRef(null);
 
   return (
     <AnimatePresence exitBeforeEnter>
@@ -69,20 +86,91 @@ const EmployeesContent: FunctionComponent = () => {
               </span>
 
               <div className="flex items-center gap-x-6 mb-4">
-                <div className="w-[3rem] h-[3rem] rounded-lg bg-bt-tab-bg">
-                  <Image
-                    src="https://images.pexels.com/photos/38554/girl-people-landscape-sun-38554.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+                <div className="w-[3rem] h-[3rem] rounded-lg bg-bt-tab-bg relative">
+                  <CustomImage
+                    src={user?.imgUrl}
                     width="100%"
                     height="100%"
                     alt="profile picture"
+                    layout="fill"
                     className="rounded-lg object-cover"
                   />
                 </div>
                 <div className="flex gap-x-2">
-                  <button className="outline-none w-fit h-[2.5rem] rounded-lg bg-bt-purple text-white text-[1.1rem] p-2 ">
+                  <input
+                    type="file"
+                    className="hidden"
+                    ref={profileImageRef}
+                    accept="image/*"
+                    onChange={async () => {
+                      const file = profileImageRef.current?.files?.[0];
+                      if (!file) return;
+                      setIsLoading(true);
+                      const url = await uploadFile(file, "image");
+                      console.log(url);
+                      const { data, error } = await supabase
+                        .from("workers")
+                        .update({
+                          imgUrl: url,
+                        })
+                        .match({ id: user?.id });
+
+                      if (error) {
+                        console.log(error);
+                        toast.error(error, {
+                          position: "top-right",
+                          autoClose: 5000,
+                          hideProgressBar: false,
+                          closeOnClick: true,
+                          pauseOnHover: true,
+                          draggable: true,
+                          progress: undefined,
+                          theme: "dark",
+                        });
+                      }
+
+                      const result = await supabase
+                        .from("workers")
+                        .select()
+                        .match({ id: user?.id });
+
+                      setUser(result.data[0]);
+                      setIsLoading(false);
+                    }}
+                  />
+
+                  <button
+                    className="outline-none w-fit h-[2.5rem] rounded-lg bg-bt-purple text-white text-[1.1rem] p-2 "
+                    onClick={async () => {
+                      profileImageRef.current?.click();
+                    }}
+                  >
                     Change Profile Picture
                   </button>
-                  <button className="outline-none w-fit h-[2.5rem] rounded-lg bg-bt-tab-bg text-white text-[1.1rem] p-2 ">
+                  <button
+                    className="outline-none w-fit h-[2.5rem] rounded-lg bg-bt-tab-bg text-white text-[1.1rem] p-2 "
+                    onClick={async () => {
+                      if (
+                        user?.imgUrl ===
+                        "https://bafybeihj2j6solt4kbl6doc7w2vw7e5eqgc66fsuzpattjnn4mjhxici7y.ipfs.dweb.link/avatar.png"
+                      )
+                        return;
+                      const { data, error } = await supabase
+                        .from("workers")
+                        .update({
+                          imgUrl:
+                            "https://bafybeihj2j6solt4kbl6doc7w2vw7e5eqgc66fsuzpattjnn4mjhxici7y.ipfs.dweb.link/avatar.png",
+                        })
+                        .match({ id: user?.id });
+
+                      const result = await supabase
+                        .from("workers")
+                        .select()
+                        .match({ id: user?.id });
+
+                      setUser(result.data[0]);
+                    }}
+                  >
                     Delete Profile Picture
                   </button>
                 </div>
@@ -94,17 +182,9 @@ const EmployeesContent: FunctionComponent = () => {
                   <span className="font-medium text-[1.2rem]">Full Name:</span>
                   <div className="items-center gap-x-6">
                     <input
+                      value={user?.name}
                       className="bg-bt-tab-bg w-[15rem] outline-none focus:border-gray-300 p-2 rounded-lg"
                       placeholder="John Doe"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <span className="font-medium text-[1.2rem]">Username:</span>
-                  <div className="items-center gap-x-6">
-                    <input
-                      className="bg-bt-tab-bg w-[15rem] outline-none focus:border-gray-300 p-2 rounded-lg"
-                      placeholder="john.doe"
                     />
                   </div>
                 </div>
@@ -113,22 +193,11 @@ const EmployeesContent: FunctionComponent = () => {
               <div className="flex gap-x-6 mb-10">
                 <div>
                   <span className="font-medium text-[1.2rem]">
-                    Old Password:
-                  </span>
-                  <div className="items-center gap-x-6">
-                    <input
-                      className="bg-bt-tab-bg w-[15rem] outline-none focus:border-gray-300 p-2 rounded-lg"
-                      placeholder="Old Password"
-                      type="password"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <span className="font-medium text-[1.2rem]">
                     New Password:
                   </span>
                   <div className="items-center gap-x-6">
                     <input
+                      onChange={(e) => setNewPassword(e.target.value)}
                       className="bg-bt-tab-bg w-[15rem] outline-none focus:border-gray-300 p-2 rounded-lg"
                       placeholder="New Password"
                       type="password"
@@ -137,8 +206,19 @@ const EmployeesContent: FunctionComponent = () => {
                 </div>
               </div>
 
-              <button className="outline-none w-fit h-[2.5rem] rounded-lg bg-bt-tab-bg text-white text-[1.1rem] p-2 ">
-                Save Changes
+              <button
+                className="outline-none w-fit h-[2.5rem] rounded-lg bg-bt-tab-bg text-white text-[1.1rem] p-2 "
+                onClick={async () => {
+                  if (newPassword.length < 6)
+                    return alert("Password must be at least 6 characters long");
+                  setIsLoading(true);
+                  const { data, error } = await supabase.auth.update({
+                    password: newPassword,
+                  });
+                  setIsLoading(false);
+                }}
+              >
+                {isLoading ? "Loading..." : "Change Password"}
               </button>
             </section>
           ) : (
@@ -162,7 +242,14 @@ const EmployeesContent: FunctionComponent = () => {
                   } `}
                 >
                   {langs.map((lang, index) => {
-                    return <span key={lang} className="cursor-pointer hover:bg-gray-500">{lang}</span>;
+                    return (
+                      <span
+                        key={lang}
+                        className="cursor-pointer hover:bg-gray-500"
+                      >
+                        {lang}
+                      </span>
+                    );
                   })}
                 </div>
               </div>

@@ -50,52 +50,53 @@ const NotificationModal: FunctionComponent = () => {
           className="absolute right-[5rem] z-20 top-[5rem] w-[20rem] max-h-[25rem] overflow-x-hidden overflow-y-auto bg-white rounded-md shadow-lg  dark:bg-gray-800"
         >
           <div className="py-2 flex flex-col flex-wrap max-w-[10rem] static cursor-pointer">
-            {myNotifications.map((notification) => {
-              const sender = employees.find(
-                (employee) => employee.id === notification.sender
-              );
-              return (
-                <div
-                  onClick={async () => {
-                    if (notification.isRead) return;
-                    const { data, error } = await supabase
-                      .from("notifications")
-                      .update({ isRead: true })
-                      .match({
-                        id: notification.id,
-                      });
+            {myNotifications
+              .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+              .map((notification) => {
+                const sender = employees.find(
+                  (employee) => employee.id === notification.sender
+                );
+                return (
+                  <div
+                    onClick={async () => {
+                      if (notification.isRead) return;
+                      const { data, error } = await supabase
+                        .from("notifications")
+                        .update({ isRead: true })
+                        .match({
+                          id: notification.id,
+                        });
+                      if (error) console.log(error);
+                    }}
+                    key={notification.id}
+                    className={`flex flex-col flex-wrap  gap-y-2 p-2 w-[20rem] border-b border-gray-700 ${
+                      !notification.isRead && "bg-bt-dark-gray"
+                    } `}
+                  >
+                    <div className="flex gap-x-2 items-center">
+                      <div className="relative w-[2.5rem] h-[2.5rem] rounded-full">
+                        <CustomImage
+                          alt="avatar"
+                          height="100%"
+                          width="100%"
+                          layout="fill"
+                          className="rounded-full"
+                          src={sender?.imgUrl}
+                        />
+                      </div>
 
-                    if (error) console.log(error);
-                  }}
-                  key={notification.id}
-                  className={`flex flex-col flex-wrap  gap-y-2 p-2 w-[20rem] border-b border-gray-700 ${
-                    !notification.isRead && "bg-bt-dark-gray"
-                  } `}
-                >
-                  <div className="flex gap-x-2 items-center">
-                    <div className="relative w-[2.5rem] h-[2.5rem] rounded-full">
-                      <CustomImage
-                        alt="avatar"
-                        height="100%"
-                        width="100%"
-                        layout="fill"
-                        className="rounded-full"
-                        src={sender?.imgUrl}
-                      />
+                      <span>{sender?.name}</span>
                     </div>
-
-                    <span>{sender?.name}</span>
+                    <span>{notification.message}</span>
                   </div>
-                  <span>{notification.message}</span>
-                </div>
-              );
-            })}
+                );
+              })}
           </div>
           <a
             href="#"
             onClick={async () => {
               myNotifications.forEach(async (notification) => {
-                if(notification.isRead) return;
+                if (notification.isRead) return;
                 const { data, error } = await supabase
                   .from("notifications")
                   .update({ isRead: true })

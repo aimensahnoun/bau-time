@@ -23,6 +23,9 @@ import supabase, { listenToData, fetchInitialData } from "../utils/supabase";
 //Loader import
 import { ClipLoader } from "react-spinners";
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function MyApp({ Component, pageProps }: AppProps) {
   //UseState
   const [isLoading, setIsLoading] = useState(true);
@@ -75,6 +78,7 @@ function MyAppWrapper({ Component, pageProps, router }: AppProps) {
   return (
     <RecoilRoot>
       <MyApp pageProps={pageProps} Component={Component} router={router} />
+      <ToastContainer />
     </RecoilRoot>
   );
 }
