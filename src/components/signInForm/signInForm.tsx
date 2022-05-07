@@ -12,6 +12,7 @@ import { useForm } from "react-hook-form";
 
 //supabase import
 import supabase from "../../utils/supabase";
+import { toast } from "react-toastify";
 
 const SignInForm: FunctionComponent<{}> = () => {
   //UseState
@@ -27,8 +28,12 @@ const SignInForm: FunctionComponent<{}> = () => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<FormValues>();
+
+  const email = watch("email");
+
   const onSubmit = async (data: FormValues) => {
     if (isLoading) return;
     setIsLoading(true);
@@ -39,6 +44,16 @@ const SignInForm: FunctionComponent<{}> = () => {
       });
       if (res.error) {
         setIsLoading(false);
+        toast.error(res.error.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
         console.log(res.error);
         return;
       }
@@ -86,7 +101,44 @@ const SignInForm: FunctionComponent<{}> = () => {
         {errors.password && (
           <span className="text-red-600">{errors.password.message}</span>
         )}
-        <span className="mb-5 md:mb-8 md:self-end md:mr-[8rem] hover:cursor-pointer">
+        <span
+          className="mb-5 md:mb-8 md:self-end md:mr-[8rem] hover:cursor-pointer"
+          onClick={async () => {
+
+            if(email.length === 0){
+              alert("Please enter your email")
+            }
+
+            const {user, error} = await supabase.auth.signIn({
+              email: email,
+            });
+            if (error) {
+              toast.error(error.message, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+              });
+            }else{
+              toast.success("Magic link sent, check your email", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+              });
+            }
+
+            
+          }}
+        >
           Forgot Password?
         </span>
 

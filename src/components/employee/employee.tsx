@@ -14,6 +14,7 @@ import { AiFillDelete } from "react-icons/ai";
 
 //supabase import
 import supabase from "../../utils/supabase";
+import { toast } from "react-toastify";
 interface EmployeeProps {
   employee: Employee;
 }
@@ -66,17 +67,39 @@ const EmployeeItem: FunctionComponent<EmployeeProps> = ({ employee }) => {
         <div
           className="mt-auto w-[1.5rem] h-[1.5rem] rounded-full flex items-center justify-center bg-[#565672]"
           onClick={async (e) => {
-            e.stopPropagation()
-            const confirmDelete = confirm("Are you sure you want to delete this employee?")
-            if(!confirmDelete) return
+            e.stopPropagation();
+            const confirmDelete = confirm(
+              "Are you sure you want to delete this employee?"
+            );
+            if (!confirmDelete) return;
 
             const { data, error } = await supabase
               .from("workers")
-              .update({ isHidden: true, isDeleted: true })
+              .update({ isHidden: true })
               .match({ id: employee.id });
 
             if (error) {
-              console.log(error);
+              toast.error(error.message, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+              });
+            } else {
+              toast.success("Assistant removed successfully", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+              });
             }
           }}
         >
