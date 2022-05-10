@@ -13,7 +13,7 @@ yarn install
 this will download and install the necessary dependencies in order for the project to run
 
 ## Necessary Keys
-This project uses [Web3 Storage](https://web3.storage) in order to store all the files and [Supabase](https://supabase.com) as its database. Both these tools need API keys in order to grant access and are necessary to the project.
+This project uses [Web3 Storage](https://web3.storage) in order to store all the files and [Supabase](https://supabase.com) as its database and [SendGrid](https://sendgrid.com). All of these tools need API keys in order to grant access and are necessary to the project.
 
 Create a ```.env.local``` file in the root of the project and fill in your API keys in this fashion
 
@@ -25,6 +25,7 @@ NEXT_PUBLIC_STORAGE_API=(WEB3STORAGE API KEY)
 
 //PRIVATE
 SUPABASE_SERVICE_ROLE=(SUPABASE SERVICE ROLE KEY)
+SENDGRID=(SENDGRID API)
 ```
 
 

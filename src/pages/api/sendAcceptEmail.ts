@@ -14,7 +14,7 @@ export default async function handler(
   const { name, studentNumber, unitName, passport, form , picture, residencePermit } = req.body;
 
   sgMail.setApiKey(
-    "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"
+    process.env.SENDGRID
   );
   const msg = {
     to: "aimensahnoun9@gmail.com", // Change to your recipient
